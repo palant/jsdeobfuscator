@@ -103,6 +103,7 @@ function addScript(action, script)
   // Ignore chrome scripts and anything executed in browser dir/profile
   let fileName = script.fileName.toLowerCase().replace(/\/+/g, "/");
   if (fileName.indexOf("chrome:/") == 0 ||
+      fileName == "xstringbundle" ||  // Why is string bundle code doing such things?
       (appDir && fileName.indexOf(appDir) == 0) ||
       (profDir && fileName.indexOf(profDir) == 0))
   {
