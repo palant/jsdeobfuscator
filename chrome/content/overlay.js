@@ -24,15 +24,15 @@
 
 window.addEventListener("load", function()
 {
-  let module = {};
-  Components.utils.import("resource://jsdeobfuscator/module.js", module);
-
   let menuitem = document.getElementById("jsdeobfuscator-menuitem");
-  menuitem.setAttribute("checked", module.isEnabled());
-
   menuitem.addEventListener("command", function()
   {
-    module.toggleEnabled();
-    menuitem.setAttribute("checked", module.isEnabled());
+    let wnd = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+                        .getService(Components.interfaces.nsIWindowMediator)
+                        .getMostRecentWindow("jsdeobfuscator:main");
+    if (wnd)
+      wnd.focus();
+    else
+      window.openDialog("chrome://jsdeobfuscator/content/jsdeobfuscator.xul", "_blank", "chrome,resizable,centerscreen,dialog=no");
   }, false);
 }, false);

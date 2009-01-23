@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is JavaScript Deobfuscator.
+   -
+   - The Initial Developer of the Original Code is
+   - Wladimir Palant.
+   - Portions created by the Initial Developer are Copyright (C) 2009
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://jsdeobfuscator/locale/jsdeobfuscator.dtd">
+
+<dialog
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    id="deobfuscator-window"
+    title="&window.title;"
+    onload="start()"
+    onunload="stop()"
+    buttons="none"
+    width="700"
+    height="500"
+    persist="screenX screenY width height sizemode"
+    windowtype="jsdeobfuscator:main">
+  <script type="application/x-javascript;version=1.7" src="jsdeobfuscator.js"/>
+
+  <tabbox id="tabs" flex="1">
+    <tabs>
+      <tab label="&compiled.scripts.label;"/>
+      <tab label="&executed.scripts.label;"/>
+    </tabs>
+    <tabpanels flex="1">
+      <tabpanel>
+        <iframe id="compiled-frame" flex="1" type="content"/>
+      </tabpanel>
+      <tabpanel>
+        <iframe id="executed-frame" flex="1" type="content"/>
+      </tabpanel>
+    </tabpanels>
+  </tabbox>
+
+</dialog>

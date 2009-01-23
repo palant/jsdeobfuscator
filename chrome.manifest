@@ -1,4 +1,3 @@
 overlay   chrome://browser/content/browser.xul chrome://jsdeobfuscator/content/overlay.xul
 content   jsdeobfuscator jar:chrome/jsdeobfuscator.jar!/content/
 locale    jsdeobfuscator {{LOCALE}} jar:chrome/jsdeobfuscator.jar!/locale/{{LOCALE}}/
-resource  jsdeobfuscator resources/

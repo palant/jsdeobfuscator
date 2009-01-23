@@ -1,5 +1,3 @@
-<?xml version="1.0"?>
-
 <!-- ***** BEGIN LICENSE BLOCK *****
    - Version: MPL 1.1
    -
@@ -24,12 +22,6 @@
    -
    - ***** END LICENSE BLOCK ***** -->
 
-<!DOCTYPE overlay SYSTEM "chrome://jsdeobfuscator/locale/overlay.dtd">
-
-<overlay id="deobfuscator-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-  <script type="application/x-javascript;version=1.7" src="overlay.js"/>
-
-  <menupopup id="menu_ToolsPopup">
-    <menuitem id="jsdeobfuscator-menuitem" insertafter="javascriptConsole" label="&menuitem.label;"/>
-  </menupopup>
-</overlay>
+<!ENTITY dummy.text        "No scripts to be displayed, try opening a website.">
+<!ENTITY url.label         "Script:">
+<!ENTITY line.label        "Line:">
