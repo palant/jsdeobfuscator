@@ -137,6 +137,18 @@ function addScript(action, script)
     frame.contentWindow.scrollTo(frame.contentWindow.scrollX, frame.contentWindow.scrollMaxY);
 }
 
+function clearList()
+{
+  for each (let frameId in ["compiled-frame", "executed-frame"])
+  {
+    let dummy = document.getElementById(frameId).contentDocument.getElementById("dummy");
+    while (dummy.nextSibling)
+      dummy.parentNode.removeChild(dummy.nextSibling);
+      
+    executedScripts = {__proto__: null};
+  }
+}
+
 // HACK: Using a string bundle to format a time. Unfortunately, format() function isn't
 // exposed in any other way (bug 451360).
 var timeFormat = Components.classes["@mozilla.org/intl/stringbundle;1"]
