@@ -118,9 +118,12 @@ function addScript(action, script)
       executedScripts[script.tag] = true;
   }
 
-  let doc = document.getElementById(action + "-frame").contentDocument;
-  let template = doc.getElementById("template");
+  let frame = document.getElementById(action + "-frame");
+  let needScroll = (frame.contentWindow.scrollY == frame.contentWindow.scrollMaxY);
 
+  let doc = document.getElementById(action + "-frame").contentDocument;
+
+  let template = doc.getElementById("template");
   let entry = template.cloneNode(true);
   entry.removeAttribute("id");
   entry.getElementsByClassName("time")[0].textContent = getTime();
@@ -128,6 +131,9 @@ function addScript(action, script)
   entry.getElementsByClassName("scriptLine")[0].textContent = script.baseLineNumber;
   entry.getElementsByClassName("scriptText")[0].textContent = script.functionSource;
   template.parentNode.appendChild(entry);
+
+  if (needScroll)
+    frame.contentWindow.scrollTo(frame.contentWindow.scrollX, frame.contentWindow.scrollMaxY);
 }
 
 // HACK: Using a string bundle to format a time. Unfortunately, format() function isn't
