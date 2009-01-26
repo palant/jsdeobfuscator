@@ -32,11 +32,16 @@ var debuggerWasOn = false;
 
 function start()
 {
-  // Move focus away from tabs when tab selection is switched (idea stolen from dialog.xml)
   document.getElementById("tabs").addEventListener("select", function(event)
   {
+    if (event.target.localName != "tabs")
+      return;
+
+    closeFindbar();
+
     setTimeout(function()
     {
+      // Move focus away from tabs when tab selection is switched (idea stolen from dialog.xml)
       let focusedElement = document.commandDispatcher.focusedElement;
       if (focusedElement && focusedElement.localName == "tab")
         document.commandDispatcher.advanceFocusIntoSubtree(focusedElement);
@@ -158,6 +163,20 @@ function getTime()
 {
   let time = new Date();
   return timeFormat.formatStringFromName("format", [time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds()], 4);
+}
+
+function openFindbar()
+{
+  let tabs = document.getElementById("tabs");
+  let selectedPanel = (tabs.selectedPanel.id == "compiled-panel" ? "compiled" : "executed");
+  let findbar = document.getElementById(selectedPanel + "-findbar");
+  findbar.startFind(findbar.FIND_NORMAL);
+}
+
+function closeFindbar()
+{
+  for each (let id in ["compiled-findbar", "executed-findbar"])
+    document.getElementById(id).close();
 }
 
 var scriptHook =

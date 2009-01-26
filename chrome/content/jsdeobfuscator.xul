@@ -37,6 +37,7 @@
     buttons="extra1"
     buttonlabelextra1="&clear.label;"
     buttonaccesskeyextra1="&clear.accesskey;"
+    ondialogaccept="return false;"
     ondialogextra1="clearList();"
     width="700"
     height="500"
@@ -44,19 +45,28 @@
     windowtype="jsdeobfuscator:main">
   <script type="application/x-javascript;version=1.7" src="jsdeobfuscator.js"/>
 
+  <keyset id="deobfuscator-keys">
+    <key id="find-key" modifiers="accel" key="F" command="find-command"/>
+  </keyset>
+
+  <commandset id="deobfuscator-commands">
+    <command id="find-command" oncommand="openFindbar();"/>
+  </commandset>
+
   <tabbox id="tabs" flex="1">
     <tabs>
-      <tab label="&compiled.scripts.label;"/>
-      <tab label="&executed.scripts.label;"/>
+      <tab id="compiled-tab" label="&compiled.scripts.label;"/>
+      <tab id="executed-tab" label="&executed.scripts.label;"/>
     </tabs>
     <tabpanels flex="1">
-      <tabpanel>
-        <iframe id="compiled-frame" flex="1" type="content"/>
+      <tabpanel id="compiled-panel" orient="vertical">
+        <browser id="compiled-frame" flex="1" type="content" disablehistory="true"/>
+        <findbar id="compiled-findbar" browserid="compiled-frame"/>
       </tabpanel>
-      <tabpanel>
-        <iframe id="executed-frame" flex="1" type="content"/>
+      <tabpanel id="executed-panel" orient="vertical">
+        <browser id="executed-frame" flex="1" type="content" disablehistory="true"/>
+        <findbar id="executed-findbar" browserid="executed-frame"/>
       </tabpanel>
     </tabpanels>
   </tabbox>
-
 </dialog>
