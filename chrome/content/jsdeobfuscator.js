@@ -254,7 +254,8 @@ function handleBrowserClick(event)
   if (!linkNode)
     return;
 
-  gViewSourceUtils.viewSource(linkNode.href, null, null, linkNode.lineNum);
+  // viewSourceUtils.js would help but it isn't unusable enough in Firefox 3.0
+  window.openDialog("chrome://global/content/viewSource.xul", "_blank", "all,dialog=no", linkNode.href, null, null, linkNode.lineNum, false); 
 }
 
 var scriptHook =
