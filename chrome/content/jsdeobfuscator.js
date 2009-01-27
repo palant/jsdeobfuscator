@@ -26,6 +26,8 @@ Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
 const debuggerService = Components.classes["@mozilla.org/js/jsd/debugger-service;1"]
                                   .getService(Components.interfaces.jsdIDebuggerService);
+const ioService = Components.classes["@mozilla.org/network/io-service;1"]
+                            .getService(Components.interfaces.nsIIOService);
 var appDir, profDir;
 var executedScripts = {__proto__: null};
 var debuggerWasOn = false;
@@ -124,6 +126,13 @@ function addScript(action, script)
       executedScripts[script.tag] = true;
   }
 
+  let fileURI = script.fileName;
+  try
+  {
+    // Debugger service messes up file:/ URLs, try to fix them
+    fileURI = ioService.newURI(fileURI, null, null).spec;
+  } catch(e) {}
+
   let frame = document.getElementById(action + "-frame");
   let needScroll = (frame.contentWindow.scrollY == frame.contentWindow.scrollMaxY);
 
@@ -133,7 +142,7 @@ function addScript(action, script)
   let entry = template.cloneNode(true);
   entry.removeAttribute("id");
   entry.getElementsByClassName("time")[0].textContent = getTime();
-  entry.getElementsByClassName("scriptURL")[0].href = entry.getElementsByClassName("scriptURL")[0].textContent = script.fileName;
+  entry.getElementsByClassName("scriptURL")[0].href = entry.getElementsByClassName("scriptURL")[0].textContent = fileURI;
   entry.getElementsByClassName("scriptLine")[0].textContent = script.baseLineNumber;
   entry.getElementsByClassName("scriptText")[0].textContent = script.functionSource;
   template.parentNode.appendChild(entry);
