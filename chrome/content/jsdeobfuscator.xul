@@ -62,6 +62,8 @@
     </popup>
   </popupset>
 
+  <dialogheader id="description" title="&window.description;"/>
+
   <tabbox id="tabs" flex="1">
     <tabs>
       <tab id="compiled-tab" label="&compiled.scripts.label;"/>

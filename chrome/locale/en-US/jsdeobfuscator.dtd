@@ -23,6 +23,7 @@
    - ***** END LICENSE BLOCK ***** -->
 
 <!ENTITY window.title           "JavaScript Deobfuscator">
+<!ENTITY window.description     "Below you will see all scripts being compiled or executed while this window is open.">
 <!ENTITY clear.label            "Clear">
 <!ENTITY clear.accesskey        "l">
 <!ENTITY copyCmd.label          "Copy">
