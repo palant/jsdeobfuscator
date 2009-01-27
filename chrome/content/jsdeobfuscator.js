@@ -133,7 +133,7 @@ function addScript(action, script)
   let entry = template.cloneNode(true);
   entry.removeAttribute("id");
   entry.getElementsByClassName("time")[0].textContent = getTime();
-  entry.getElementsByClassName("scriptURL")[0].textContent = script.fileName;
+  entry.getElementsByClassName("scriptURL")[0].href = entry.getElementsByClassName("scriptURL")[0].textContent = script.fileName;
   entry.getElementsByClassName("scriptLine")[0].textContent = script.baseLineNumber;
   entry.getElementsByClassName("scriptText")[0].textContent = script.functionSource;
   template.parentNode.appendChild(entry);
@@ -177,6 +177,55 @@ function closeFindbar()
 {
   for each (let id in ["compiled-findbar", "executed-findbar"])
     document.getElementById(id).close();
+}
+
+function updateContext()
+{
+  for each (let command in ["copy", "selectAll"])
+  {
+    let enabled = true;
+    try
+    {
+      let controller = document.commandDispatcher.getControllerForCommand("cmd_" + command);
+      enabled = (controller && controller.isCommandEnabled("cmd_" + command));
+    }
+    catch (e) {}
+
+    document.getElementById("context-" + command).setAttribute("disabled", !enabled);
+  }
+
+  let linkNode = document.popupNode;
+  while (linkNode && !(linkNode instanceof HTMLAnchorElement))
+    linkNode = linkNode.parentNode;
+  document.getElementById("context-copyLink").setAttribute("disabled", !linkNode);
+}
+
+function execCommand(command)
+{
+  try
+  {
+    let controller = document.commandDispatcher.getControllerForCommand(command);
+    if (controller && controller.isCommandEnabled(command))
+      controller.doCommand(command);
+  }
+  catch (e) {}
+}
+
+function selectAll(anchor)
+{
+  let doc = anchor.ownerDocument;
+  let dummy = doc.getElementById("dummy");
+  let selection = doc.defaultView.getSelection();
+
+  // Copy command will copy invisible elements, make sure not to select too much
+  let range = document.createRange();
+  range.selectNodeContents(dummy.parentNode);
+  if (dummy.offsetHeight)
+    range.setStartBefore(dummy);
+  else
+    range.setStartAfter(dummy);
+  selection.removeAllRanges();
+  selection.addRange(range);
 }
 
 var scriptHook =

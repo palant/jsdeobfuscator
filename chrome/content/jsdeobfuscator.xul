@@ -53,6 +53,15 @@
     <command id="find-command" oncommand="openFindbar();"/>
   </commandset>
 
+  <popupset id="deobfuscator-popupset">
+    <popup id="browser-context" onpopupshowing="updateContext();">
+      <menuitem id="context-copy" label="&copyCmd.label;" accesskey="&copyCmd.accesskey;" oncommand="execCommand('cmd_copy');"/>
+      <menuitem id="context-copyLink" label="&copyLinkCmd.label;" accesskey="&copyLinkCmd.accesskey;" oncommand="execCommand('cmd_copyLink');"/>
+      <menuitem id="context-selectAll" label="&selectAllCmd.label;" accesskey="&selectAllCmd.accesskey;" oncommand="selectAll(document.popupNode);"/>
+      <menuitem id="context-find" label="&findCmd.label;" accesskey="&findCmd.accesskey;" command="find-command" key="find-key"/>
+    </popup>
+  </popupset>
+
   <tabbox id="tabs" flex="1">
     <tabs>
       <tab id="compiled-tab" label="&compiled.scripts.label;"/>
@@ -60,11 +69,11 @@
     </tabs>
     <tabpanels flex="1">
       <tabpanel id="compiled-panel" orient="vertical">
-        <browser id="compiled-frame" flex="1" type="content" disablehistory="true"/>
+        <browser id="compiled-frame" flex="1" context="browser-context" type="content" disablehistory="true"/>
         <findbar id="compiled-findbar" browserid="compiled-frame"/>
       </tabpanel>
       <tabpanel id="executed-panel" orient="vertical">
-        <browser id="executed-frame" flex="1" type="content" disablehistory="true"/>
+        <browser id="executed-frame" flex="1" context="browser-context" type="content" disablehistory="true"/>
         <findbar id="executed-findbar" browserid="executed-frame"/>
       </tabpanel>
     </tabpanels>
