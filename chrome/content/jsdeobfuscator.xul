@@ -44,6 +44,7 @@
     persist="screenX screenY width height sizemode"
     windowtype="jsdeobfuscator:main">
   <script type="application/x-javascript;version=1.7" src="jsdeobfuscator.js"/>
+  <script type="application/javascript" src="chrome://global/content/viewSourceUtils.js"/>
 
   <keyset id="deobfuscator-keys">
     <key id="find-key" modifiers="accel" key="F" command="find-command"/>
@@ -71,11 +72,11 @@
     </tabs>
     <tabpanels flex="1">
       <tabpanel id="compiled-panel" orient="vertical">
-        <browser id="compiled-frame" flex="1" context="browser-context" type="content" disablehistory="true"/>
+        <browser id="compiled-frame" flex="1" onclick="handleBrowserClick(event);" context="browser-context" type="content" disablehistory="true"/>
         <findbar id="compiled-findbar" browserid="compiled-frame"/>
       </tabpanel>
       <tabpanel id="executed-panel" orient="vertical">
-        <browser id="executed-frame" flex="1" context="browser-context" type="content" disablehistory="true"/>
+        <browser id="executed-frame" flex="1" onclick="handleBrowserClick(event);" context="browser-context" type="content" disablehistory="true"/>
         <findbar id="executed-findbar" browserid="executed-frame"/>
       </tabpanel>
     </tabpanels>

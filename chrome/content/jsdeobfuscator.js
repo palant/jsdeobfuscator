@@ -142,9 +142,13 @@ function addScript(action, script)
   let entry = template.cloneNode(true);
   entry.removeAttribute("id");
   entry.getElementsByClassName("time")[0].textContent = getTime();
-  entry.getElementsByClassName("scriptURL")[0].href = entry.getElementsByClassName("scriptURL")[0].textContent = fileURI;
   entry.getElementsByClassName("scriptLine")[0].textContent = script.baseLineNumber;
   entry.getElementsByClassName("scriptText")[0].textContent = script.functionSource;
+
+  let scriptURLNode = entry.getElementsByClassName("scriptURL")[0];
+  scriptURLNode.href = scriptURLNode.textContent = fileURI;
+  scriptURLNode.lineNum = script.baseLineNumber;
+
   template.parentNode.appendChild(entry);
 
   if (needScroll)
@@ -235,6 +239,22 @@ function selectAll(anchor)
     range.setStartAfter(dummy);
   selection.removeAllRanges();
   selection.addRange(range);
+}
+
+function handleBrowserClick(event)
+{
+  if (event.button != 0)
+    return;
+
+  event.preventDefault();
+
+  let linkNode = event.target;
+  while (linkNode && !(linkNode instanceof HTMLAnchorElement))
+    linkNode = linkNode.parentNode;
+  if (!linkNode)
+    return;
+
+  gViewSourceUtils.viewSource(linkNode.href, null, null, linkNode.lineNum);
 }
 
 var scriptHook =
