@@ -32,6 +32,8 @@
 <!ENTITY exclude.none.label     "none">
 <!ENTITY editFilters.label      "Modify filters...">
 <!ENTITY editFilters.accesskey  "f">
+<!ENTITY resetFilters.label     "Reset to default">
+<!ENTITY resetFilters.accesskey "d">
 <!ENTITY copyCmd.label          "Copy">
 <!ENTITY copyCmd.accesskey      "C">
 <!ENTITY copyLinkCmd.label      "Copy Link Location">

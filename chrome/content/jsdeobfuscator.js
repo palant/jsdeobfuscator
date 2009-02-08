@@ -88,16 +88,7 @@ function start()
   appDir = getDirURL("GreD");
   profDir = getDirURL("ProfD");
 
-  // Read out preferences
-  try
-  {
-    let prefService = Components.classes["@mozilla.org/preferences-service;1"]
-                                .getService(Components.interfaces.nsIPrefBranch);
-    filters = Components.classes["@mozilla.org/dom/json;1"]
-                         .getService(Components.interfaces.nsIJSON)
-                         .decode(prefService.getCharPref("extensions.jsdeobfuscator.filters"));
-  } catch(e) {};
-  updateFilterUI();
+  updateFiltersUI();
 
   // Initialize debugger
   debuggerService.scriptHook = scriptHook;
@@ -117,8 +108,18 @@ function stop()
     debuggerService.off();
 }
 
-function updateFilterUI()
+function updateFiltersUI()
 {
+  // Read out JSON preference
+  try
+  {
+    let prefService = Components.classes["@mozilla.org/preferences-service;1"]
+                                .getService(Components.interfaces.nsIPrefBranch);
+    filters = Components.classes["@mozilla.org/dom/json;1"]
+                         .getService(Components.interfaces.nsIJSON)
+                         .decode(prefService.getCharPref("extensions.jsdeobfuscator.filters"));
+  } catch(e) { return; };
+
   for each (let type in ["include", "exclude"])
   {
     let element = document.getElementById(type + "Filters");
@@ -301,9 +302,6 @@ function editFilters()
   window.openDialog("editfilters.xul", "_blank", "modal,centerscreen,resizable", filters, result);
   if ("include" in result)
   {
-    filters = result;
-    updateFilterUI();
-
     // Save preferences
     try
     {
@@ -311,11 +309,23 @@ function editFilters()
                                   .getService(Components.interfaces.nsIPrefBranch);
       let json = Components.classes["@mozilla.org/dom/json;1"]
                            .getService(Components.interfaces.nsIJSON)
-                           .encode(filters);
+                           .encode(result);
       prefService.setCharPref("extensions.jsdeobfuscator.filters", json);
       prefService.QueryInterface(Components.interfaces.nsIPrefService).savePrefFile(null);
+      updateFiltersUI();
     } catch(e) {};
   }
+}
+
+function resetFilters()
+{
+  try
+  {
+    let prefService = Components.classes["@mozilla.org/preferences-service;1"]
+                                .getService(Components.interfaces.nsIPrefBranch);
+    prefService.clearUserPref("extensions.jsdeobfuscator.filters");
+      updateFiltersUI();
+  } catch(e) {};
 }
 
 var scriptHook =
