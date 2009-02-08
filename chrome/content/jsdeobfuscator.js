@@ -31,6 +31,8 @@ const ioService = Components.classes["@mozilla.org/network/io-service;1"]
 var appDir, profDir;
 var executedScripts = {__proto__: null};
 var debuggerWasOn = false;
+var include = [];
+var exclude = [];
 
 function start()
 {
@@ -87,6 +89,20 @@ function start()
   appDir = getDirURL("GreD");
   profDir = getDirURL("ProfD");
 
+  // Read out preferences
+  try
+  {
+    let prefService = Components.classes["@mozilla.org/preferences-service;1"]
+                                .getService(Components.interfaces.nsIPrefBranch);
+    let json = Components.classes["@mozilla.org/dom/json;1"]
+                         .getService(Components.interfaces.nsIJSON)
+                         .decode(prefService.getCharPref("extensions.jsdeobfuscator.filters"));
+    if (json && json.include instanceof Array)
+      include = json.include;
+    if (json && json.exclude instanceof Array)
+      exclude = json.exclude;
+  } catch(e) {alert(e)};
+
   // Initialize debugger
   debuggerService.scriptHook = scriptHook;
   debuggerService.functionHook = scriptHook;
@@ -105,17 +121,30 @@ function stop()
     debuggerService.off();
 }
 
+function checkMatch(fileName, filters)
+{
+  fileName = fileName.toLowerCase().replace(/\/+/g, "/");
+  for each (let filter in filters)
+  {
+    if (appDir)
+      filter = filter.replace(/%APPDIR%/gi, appDir);
+    if (profDir)
+      filter = filter.replace(/%PROFILEDIR%/gi, profDir);
+    filter = filter.toLowerCase().replace(/\/+/g, "/");
+
+    if (fileName.indexOf(filter) == 0)
+      return true;
+  }
+  return false;
+}
+
 function addScript(action, script)
 {
-  // Ignore chrome scripts and anything executed in browser dir/profile
-  let fileName = script.fileName.toLowerCase().replace(/\/+/g, "/");
-  if (fileName.indexOf("chrome:/") == 0 ||
-      fileName == "xstringbundle" ||  // Why is string bundle code doing such things?
-      (appDir && fileName.indexOf(appDir) == 0) ||
-      (profDir && fileName.indexOf(profDir) == 0))
-  {
+  // Check filters first
+  if (include.length && !checkMatch(script.fileName, include))
     return;
-  }
+  if (checkMatch(script.fileName, exclude))
+    return;
 
   // Don't show script execution twice
   if (action == "executed")
