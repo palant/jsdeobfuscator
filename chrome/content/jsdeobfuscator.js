@@ -31,8 +31,7 @@ const ioService = Components.classes["@mozilla.org/network/io-service;1"]
 var appDir, profDir;
 var executedScripts = {__proto__: null};
 var debuggerWasOn = false;
-var include = [];
-var exclude = [];
+var filters = {include: [], exclude: []};
 
 function start()
 {
@@ -94,14 +93,10 @@ function start()
   {
     let prefService = Components.classes["@mozilla.org/preferences-service;1"]
                                 .getService(Components.interfaces.nsIPrefBranch);
-    let json = Components.classes["@mozilla.org/dom/json;1"]
+    filters = Components.classes["@mozilla.org/dom/json;1"]
                          .getService(Components.interfaces.nsIJSON)
                          .decode(prefService.getCharPref("extensions.jsdeobfuscator.filters"));
-    if (json && json.include instanceof Array)
-      include = json.include;
-    if (json && json.exclude instanceof Array)
-      exclude = json.exclude;
-  } catch(e) {alert(e)};
+  } catch(e) {};
   updateFilterUI();
 
   // Initialize debugger
@@ -127,8 +122,8 @@ function updateFilterUI()
   for each (let type in ["include", "exclude"])
   {
     let element = document.getElementById(type + "Filters");
-    if (window[type].length)
-      element.textContent = window[type].join(", ");
+    if (filters[type].length)
+      element.textContent = filters[type].join(", ");
     else
       element.textContent = element.getAttribute("defValue");
   }
@@ -154,9 +149,9 @@ function checkMatch(fileName, filters)
 function addScript(action, script)
 {
   // Check filters first
-  if (include.length && !checkMatch(script.fileName, include))
+  if (filters.include.length && !checkMatch(script.fileName, filters.include))
     return;
-  if (checkMatch(script.fileName, exclude))
+  if (checkMatch(script.fileName, filters.exclude))
     return;
 
   // Don't show script execution twice
@@ -298,6 +293,29 @@ function handleBrowserClick(event)
 
   // viewSourceUtils.js would help but it isn't unusable enough in Firefox 3.0
   window.openDialog("chrome://global/content/viewSource.xul", "_blank", "all,dialog=no", linkNode.href, null, null, linkNode.lineNum, false); 
+}
+
+function editFilters()
+{
+  let result = {};
+  window.openDialog("editfilters.xul", "_blank", "modal,centerscreen,resizable", filters, result);
+  if ("include" in result)
+  {
+    filters = result;
+    updateFilterUI();
+
+    // Save preferences
+    try
+    {
+      let prefService = Components.classes["@mozilla.org/preferences-service;1"]
+                                  .getService(Components.interfaces.nsIPrefBranch);
+      let json = Components.classes["@mozilla.org/dom/json;1"]
+                           .getService(Components.interfaces.nsIJSON)
+                           .encode(filters);
+      prefService.setCharPref("extensions.jsdeobfuscator.filters", json);
+      prefService.QueryInterface(Components.interfaces.nsIPrefService).savePrefFile(null);
+    } catch(e) {};
+  }
 }
 
 var scriptHook =

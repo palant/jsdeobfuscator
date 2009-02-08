@@ -30,7 +30,7 @@
 <!ENTITY excludeFilters.label   "Exclude scripts:">
 <!ENTITY include.all.label      "all">
 <!ENTITY exclude.none.label     "none">
-<!ENTITY editFilters.label      "Modify filters">
+<!ENTITY editFilters.label      "Modify filters...">
 <!ENTITY editFilters.accesskey  "f">
 <!ENTITY copyCmd.label          "Copy">
 <!ENTITY copyCmd.accesskey      "C">

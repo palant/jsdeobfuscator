@@ -83,7 +83,7 @@
 
   <vbox id="filters">
     <hbox align="center">
-      <button id="editFilters" label="&editFilters.label;" accesskey="&editFilters.accesskey;"/>
+      <button id="editFilters" label="&editFilters.label;" accesskey="&editFilters.accesskey;" oncommand="editFilters();"/>
       <grid flex="1">
         <columns>
           <column/>
