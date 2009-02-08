@@ -80,4 +80,27 @@
       </tabpanel>
     </tabpanels>
   </tabbox>
+
+  <vbox id="filters">
+    <hbox align="center">
+      <button id="editFilters" label="&editFilters.label;" accesskey="&editFilters.accesskey;"/>
+      <grid flex="1">
+        <columns>
+          <column/>
+          <column flex="1"/>
+        </columns>
+        <rows>
+          <row>
+            <description value="&includeFilters.label;"/>
+            <description id="includeFilters" defValue="&include.all.label;"/>
+          </row>
+          <row>
+            <description value="&excludeFilters.label;"/>
+            <description id="excludeFilters" defValue="&exclude.none.label;"/>
+          </row>
+        </rows>
+      </grid>
+    </hbox>
+  </vbox>
+
 </dialog>

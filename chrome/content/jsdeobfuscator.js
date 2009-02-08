@@ -102,6 +102,7 @@ function start()
     if (json && json.exclude instanceof Array)
       exclude = json.exclude;
   } catch(e) {alert(e)};
+  updateFilterUI();
 
   // Initialize debugger
   debuggerService.scriptHook = scriptHook;
@@ -119,6 +120,18 @@ function stop()
   debuggerService.topLevelHook = null;
   if (!debuggerWasOn)
     debuggerService.off();
+}
+
+function updateFilterUI()
+{
+  for each (let type in ["include", "exclude"])
+  {
+    let element = document.getElementById(type + "Filters");
+    if (window[type].length)
+      element.textContent = window[type].join(", ");
+    else
+      element.textContent = element.getAttribute("defValue");
+  }
 }
 
 function checkMatch(fileName, filters)

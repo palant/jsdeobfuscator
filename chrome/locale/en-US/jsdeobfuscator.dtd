@@ -26,6 +26,12 @@
 <!ENTITY window.description     "Below you will see all scripts being compiled or executed while this window is open.">
 <!ENTITY clear.label            "Clear">
 <!ENTITY clear.accesskey        "l">
+<!ENTITY includeFilters.label   "Include scripts:">
+<!ENTITY excludeFilters.label   "Exclude scripts:">
+<!ENTITY include.all.label      "all">
+<!ENTITY exclude.none.label     "none">
+<!ENTITY editFilters.label      "Modify filters">
+<!ENTITY editFilters.accesskey  "f">
 <!ENTITY copyCmd.label          "Copy">
 <!ENTITY copyCmd.accesskey      "C">
 <!ENTITY copyLinkCmd.label      "Copy Link Location">
