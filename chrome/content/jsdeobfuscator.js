@@ -344,10 +344,18 @@ var scriptHook =
     if (type == Components.interfaces.jsdICallHook.TYPE_TOPLEVEL_START || type == Components.interfaces.jsdICallHook.TYPE_FUNCTION_CALL)
       addScript("executed", frame.script);
   },
+  prevScript: null,
   onExecute: function(frame, type, val)
   {
     val.value = Components.interfaces.jsdIExecutionHook.RETURN_CONTINUE;
-    addScript("executed", frame.script);
+
+    // Bail out early if we got the same script as last time
+    let script = frame.script;
+    if (script == this.prevScript)
+      return;
+    this.prevScript = script;
+
+    addScript("executed", script);
   },
   QueryInterface: XPCOMUtils.generateQI([Components.interfaces.jsdIScriptHook, Components.interfaces.jsdICallHook, Components.interfaces.jsdIExecutionHook])
 }
