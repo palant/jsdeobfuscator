@@ -94,6 +94,7 @@ function start()
   debuggerService.scriptHook = scriptHook;
   debuggerService.functionHook = scriptHook;
   debuggerService.topLevelHook = scriptHook;
+  debuggerService.interruptHook = scriptHook;
   debuggerWasOn = debuggerService.isOn;
   if (!debuggerWasOn)
     debuggerService.on();
@@ -104,6 +105,7 @@ function stop()
   debuggerService.scriptHook = null;
   debuggerService.functionHook = null;
   debuggerService.topLevelHook = null;
+  debuggerService.interruptHook = null;
   if (!debuggerWasOn)
     debuggerService.off();
 }
@@ -342,5 +344,10 @@ var scriptHook =
     if (type == Components.interfaces.jsdICallHook.TYPE_TOPLEVEL_START || type == Components.interfaces.jsdICallHook.TYPE_FUNCTION_CALL)
       addScript("executed", frame.script);
   },
-  QueryInterface: XPCOMUtils.generateQI([Components.interfaces.jsdIScriptHook, Components.interfaces.jsdICallHook])
+  onExecute: function(frame, type, val)
+  {
+    val.value = Components.interfaces.jsdIExecutionHook.RETURN_CONTINUE;
+    addScript("executed", frame.script);
+  },
+  QueryInterface: XPCOMUtils.generateQI([Components.interfaces.jsdIScriptHook, Components.interfaces.jsdICallHook, Components.interfaces.jsdIExecutionHook])
 }
