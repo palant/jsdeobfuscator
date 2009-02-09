@@ -174,7 +174,7 @@ function addScript(action, script)
   } catch(e) {}
 
   let frame = document.getElementById(action + "-frame");
-  let needScroll = (frame.contentWindow.scrollY == frame.contentWindow.scrollMaxY);
+  let needScroll = (frame.contentWindow.scrollY >= frame.contentWindow.scrollMaxY - 10);
 
   let doc = document.getElementById(action + "-frame").contentDocument;
 
