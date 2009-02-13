@@ -92,6 +92,10 @@ function start()
   updateFiltersUI();
 
   // Initialize debugger
+  debuggerWasOn = debuggerService.isOn;
+  if (!debuggerWasOn)
+    debuggerService.on();
+
   debuggerService.scriptHook = scriptHook;
   debuggerService.functionHook = scriptHook;
   debuggerService.topLevelHook = scriptHook;
@@ -99,10 +103,6 @@ function start()
 
   debuggerOldFlags = debuggerService.flags;
   debuggerService.flags = debuggerOldFlags | Components.interfaces.jsdIDebuggerService.DISABLE_OBJECT_TRACE;
-
-  debuggerWasOn = debuggerService.isOn;
-  if (!debuggerWasOn)
-    debuggerService.on();
 }
 
 function stop()
