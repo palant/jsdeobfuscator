@@ -31,6 +31,7 @@ const ioService = Components.classes["@mozilla.org/network/io-service;1"]
 var appDir, profDir;
 var executedScripts = {__proto__: null};
 var debuggerWasOn = false;
+var debuggerOldFlags;
 var filters = {include: [], exclude: []};
 
 function start()
@@ -95,6 +96,10 @@ function start()
   debuggerService.functionHook = scriptHook;
   debuggerService.topLevelHook = scriptHook;
   debuggerService.interruptHook = scriptHook;
+
+  debuggerOldFlags = debuggerService.flags;
+  debuggerService.flags = debuggerOldFlags | Components.interfaces.jsdIDebuggerService.DISABLE_OBJECT_TRACE;
+
   debuggerWasOn = debuggerService.isOn;
   if (!debuggerWasOn)
     debuggerService.on();
@@ -106,6 +111,7 @@ function stop()
   debuggerService.functionHook = null;
   debuggerService.topLevelHook = null;
   debuggerService.interruptHook = null;
+  debuggerService.flags = debuggerOldFlags;
   if (!debuggerWasOn)
     debuggerService.off();
 }
