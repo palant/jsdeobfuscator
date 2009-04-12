@@ -38,6 +38,6 @@ system(qq(hg commit -m "Releasing JavaScript Deobfuscator $version" downloads js
 my $branch = $version;
 $branch =~ s/\./_/g;
 $branch = "JAVASCRIPT_DEOBFUSCATOR_".$branch."_RELEASE";
-system(qq(hg tag $branch));
+system(qq(hg tag -f $branch));
 
 system(qq(hg push));
