@@ -358,7 +358,7 @@ var scriptHook =
     // Bail out early if we got the same script as last time
     let script = frame.script;
     if (script == this.prevScript)
-      return;
+      return Components.interfaces.jsdIExecutionHook.RETURN_CONTINUE;
     this.prevScript = script;
 
     addScript("executed", script);
