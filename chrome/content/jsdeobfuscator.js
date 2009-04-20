@@ -353,7 +353,7 @@ var scriptHook =
   prevScript: null,
   onExecute: function(frame, type, val)
   {
-    val.value = Components.interfaces.jsdIExecutionHook.RETURN_CONTINUE;
+    val.value = "";
 
     // Bail out early if we got the same script as last time
     let script = frame.script;
@@ -362,6 +362,8 @@ var scriptHook =
     this.prevScript = script;
 
     addScript("executed", script);
+
+    return Components.interfaces.jsdIExecutionHook.RETURN_CONTINUE;
   },
   QueryInterface: XPCOMUtils.generateQI([Components.interfaces.jsdIScriptHook, Components.interfaces.jsdICallHook, Components.interfaces.jsdIExecutionHook])
 }
