@@ -58,6 +58,10 @@
       {
         float: right;
       }
+      .stats
+      {
+        clear: both;
+      }
       .scriptURL
       {
         color: blue;
@@ -78,6 +82,10 @@
 <div class="location">
 &url.label; <a class="scriptURL"/>
 &line.label; <span class="scriptLine"/>
+</div>
+<div class="stats" style="display: none;">
+&numCalls.label; <a class="numCalls"/><br/>
+&avgTime.label; <span class="avgTime" recursion="&recursion.label;"/>
 </div>
 <pre class="scriptText"/>
 </div>

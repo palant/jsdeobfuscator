@@ -163,12 +163,10 @@ function addScript(action, script)
     return;
 
   // Don't show script execution twice
-  if (action == "executed")
+  if (action == "executed" && script.tag in executedScripts)
   {
-    if (script.tag in executedScripts)
-      return;
-    else
-      executedScripts[script.tag] = true;
+    updateExecutedScript(script, false);
+    return;
   }
 
   let fileURI = script.fileName;
@@ -196,8 +194,64 @@ function addScript(action, script)
 
   template.parentNode.appendChild(entry);
 
+  if (action == "executed")
+  {
+    executedScripts[script.tag] = {
+      entry: entry,
+      startTime: Date.now(),
+      calls: 1,
+      returns: 0,
+      executionTime: 0
+    };
+  }
+
   if (needScroll)
     frame.contentWindow.scrollTo(frame.contentWindow.scrollX, frame.contentWindow.scrollMaxY);
+}
+
+function updateExecutedScript(script, isReturn)
+{
+  let scriptData = executedScripts[script.tag];
+  if (!scriptData)
+    return;
+
+  if (isReturn)
+  {
+    scriptData.returns++;
+    if (typeof scriptData.executionTime != "undefined")
+      scriptData.executionTime += Date.now() - scriptData.startTime;
+  }
+  else
+  {
+    if (typeof scriptData.executionTime != "undefined")
+    {
+      if (scriptData.calls != scriptData.returns)
+        scriptData.executionTime = undefined;
+      else
+        scriptData.startTime = Date.now();
+    }
+    scriptData.calls++;
+  }
+
+  if (scriptData.returns > 0)
+  {
+    let entry = scriptData.entry;
+    let wnd = entry.ownerDocument.defaultView;
+    let needScroll = (wnd.scrollY >= wnd.scrollMaxY - 10);
+
+    entry.getElementsByClassName("numCalls")[0].textContent = scriptData.returns;
+
+    let avgTime = entry.getElementsByClassName("avgTime")[0];
+    if (typeof scriptData.executionTime != "undefined")
+      avgTime.textContent = (scriptData.executionTime / scriptData.returns).toFixed(0);
+    else
+      avgTime.textContent = avgTime.getAttribute("recursion");
+
+    entry.getElementsByClassName("stats")[0].removeAttribute("style");
+
+    if (needScroll)
+      wnd.scrollTo(wnd.scrollX, wnd.scrollMaxY);
+  }
 }
 
 function clearList()
@@ -348,6 +402,8 @@ var scriptHook =
   {
     if (type == Components.interfaces.jsdICallHook.TYPE_TOPLEVEL_START || type == Components.interfaces.jsdICallHook.TYPE_FUNCTION_CALL)
       addScript("executed", frame.script);
+    else if (type == Components.interfaces.jsdICallHook.TYPE_TOPLEVEL_END || type == Components.interfaces.jsdICallHook.TYPE_FUNCTION_RETURN)
+      updateExecutedScript(frame.script, true);
   },
   prevScript: null,
   QueryInterface: XPCOMUtils.generateQI([Components.interfaces.jsdIScriptHook, Components.interfaces.jsdICallHook])
