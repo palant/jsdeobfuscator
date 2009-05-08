@@ -270,7 +270,7 @@ function clearList()
 // exposed in any other way (bug 451360).
 var timeFormat = Components.classes["@mozilla.org/intl/stringbundle;1"]
                            .getService(Components.interfaces.nsIStringBundleService)
-                           .createBundle("data:text/plain,format=" + encodeURIComponent("%02S:%02S:%02S.%04S"));
+                           .createBundle("data:text/plain,format=" + encodeURIComponent("%02S:%02S:%02S.%03S"));
 function getTime()
 {
   let time = new Date();
