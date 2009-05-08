@@ -99,7 +99,6 @@ function start()
   debuggerService.scriptHook = scriptHook;
   debuggerService.functionHook = scriptHook;
   debuggerService.topLevelHook = scriptHook;
-  debuggerService.interruptHook = scriptHook;
 
   debuggerOldFlags = debuggerService.flags;
   debuggerService.flags = debuggerOldFlags | Components.interfaces.jsdIDebuggerService.DISABLE_OBJECT_TRACE;
@@ -351,19 +350,5 @@ var scriptHook =
       addScript("executed", frame.script);
   },
   prevScript: null,
-  onExecute: function(frame, type, val)
-  {
-    val.value = "";
-
-    // Bail out early if we got the same script as last time
-    let script = frame.script;
-    if (script == this.prevScript)
-      return Components.interfaces.jsdIExecutionHook.RETURN_CONTINUE;
-    this.prevScript = script;
-
-    addScript("executed", script);
-
-    return Components.interfaces.jsdIExecutionHook.RETURN_CONTINUE;
-  },
-  QueryInterface: XPCOMUtils.generateQI([Components.interfaces.jsdIScriptHook, Components.interfaces.jsdICallHook, Components.interfaces.jsdIExecutionHook])
+  QueryInterface: XPCOMUtils.generateQI([Components.interfaces.jsdIScriptHook, Components.interfaces.jsdICallHook])
 }
