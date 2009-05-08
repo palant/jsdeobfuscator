@@ -34,6 +34,8 @@ var debuggerWasOn = false;
 var debuggerOldFlags;
 var filters = {include: [], exclude: []};
 
+var paused = false;
+
 function start()
 {
   document.getElementById("tabs").addEventListener("select", function(event)
@@ -156,6 +158,9 @@ function checkMatch(fileName, filters)
 
 function addScript(action, script)
 {
+  if (paused)
+    return;
+
   // Check filters first
   if (filters.include.length && !checkMatch(script.fileName, filters.include))
     return;

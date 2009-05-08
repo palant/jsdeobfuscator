@@ -34,11 +34,8 @@
     title="&window.title;"
     onload="start()"
     onunload="stop()"
-    buttons="extra1"
-    buttonlabelextra1="&clear.label;"
-    buttonaccesskeyextra1="&clear.accesskey;"
+    buttons="none"
     ondialogaccept="return false;"
-    ondialogextra1="clearList();"
     width="700"
     height="500"
     persist="screenX screenY width height sizemode"
@@ -103,5 +100,10 @@
       </grid>
     </hbox>
   </vbox>
+
+  <hbox id="buttons" pack="end">
+    <button id="pauseButton" label="&pause.label;" accesskey="&pause.accesskey;" type="checkbox" autoCheck="true" oncommand="paused = this.checked;"/>
+    <button id="clearButton" label="&clear.label;" accesskey="&clear.accesskey;" oncommand="clearList();"/>
+  </hbox>
 
 </dialog>
