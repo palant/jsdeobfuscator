@@ -222,9 +222,13 @@ function updateExecutedScript(script, isReturn)
 
   if (isReturn)
   {
-    scriptData.returns++;
-    if (typeof scriptData.executionTime != "undefined")
-      scriptData.executionTime += Date.now() - scriptData.startTime;
+    if (scriptData.startTime)
+    {
+      scriptData.returns++;
+      if (typeof scriptData.executionTime != "undefined")
+        scriptData.executionTime += Date.now() - scriptData.startTime;
+      scriptData.startTime = 0;
+    }
   }
   else
   {
