@@ -32,4 +32,8 @@
   <menupopup id="menu_ToolsPopup">
     <menuitem id="jsdeobfuscator-menuitem" insertafter="javascriptConsole" label="&menuitem.label;"/>
   </menupopup>
+
+  <menupopup id="toolsPopup">
+    <menuitem id="jsdeobfuscator-menuitem" insertafter="javascriptConsole" label="&menuitem.label;"/>
+  </menupopup>
 </overlay>
