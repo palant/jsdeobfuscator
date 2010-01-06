@@ -8,8 +8,10 @@
   <em:id>jsdeobfuscator@adblockplus.org</em:id>
   <em:version>{{VERSION}}</em:version>
   <em:name>JavaScript Deobfuscator</em:name>
-  <em:description>Shows you what JavaScript code gets to run on webpages</em:description>
+  <em:description>{{DESCRIPTION}}</em:description>
   <em:creator>Wladimir Palant</em:creator>
+
+{{LOCALIZED}}
   
   <!-- FireFox -->
   <em:targetApplication>
