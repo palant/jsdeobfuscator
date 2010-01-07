@@ -1,0 +1,6 @@
+<!ENTITY dummy.text "Nie ma skryptów do wyświetlenia. Spróbuj otworzyć witrynę.">
+<!ENTITY url.label "Skrypt:">
+<!ENTITY line.label "Wiersz:">
+<!ENTITY numCalls.label "Liczba wywołań:">
+<!ENTITY avgTime.label "Średni czas wykonania (ms):">
+<!ENTITY recursion.label "wykryto rekurencję">

@@ -1,0 +1,3 @@
+<!ENTITY window.title "Modifier les filtres">
+<!ENTITY include.label "Scripts à inclure (un préfixe par ligne, laisser vide pour 'tous') :">
+<!ENTITY exclude.label "Scripts à exlure (un préfixe par ligne, laisser vide pour 'tous') :">
