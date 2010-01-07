@@ -1,0 +1,48 @@
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is JavaScript Deobfuscator.
+   -
+   - The Initial Developer of the Original Code is
+   - Wladimir Palant.
+   - Portions created by the Initial Developer are Copyright (C) 2009
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+<!ENTITY window.title           "JavaScript Deobfuscator">
+<!ENTITY window.description     "Ниже приведены все скрипты, которые были откомпилированы или выполнены, пока это окно было открыто.">
+<!ENTITY clear.label            "Очистить">
+<!ENTITY clear.accesskey        "ч">
+<!ENTITY pause.label            "Приостановить запись">
+<!ENTITY pause.accesskey        "р">
+<!ENTITY includeFilters.label   "Включенные скрипты:">
+<!ENTITY excludeFilters.label   "Исключенные скрипты:">
+<!ENTITY include.all.label      "все">
+<!ENTITY exclude.none.label     "никаких">
+<!ENTITY editFilters.label      "Изменить фильтры...">
+<!ENTITY editFilters.accesskey  "з">
+<!ENTITY resetFilters.label     "Восстановить стандартные значения">
+<!ENTITY resetFilters.accesskey "с">
+<!ENTITY copyCmd.label          "Копировать">
+<!ENTITY copyCmd.accesskey      "К">
+<!ENTITY copyLinkCmd.label      "Копировать ссылку">
+<!ENTITY copyLinkCmd.accesskey  "ы">
+<!ENTITY selectAllCmd.label     "Выделить всё">
+<!ENTITY selectAllCmd.accesskey "д">
+<!ENTITY findCmd.label          "Найти...">
+<!ENTITY findCmd.accesskey      "Н">
+<!ENTITY compiled.scripts.label "Откомпилированные скрипты">
+<!ENTITY executed.scripts.label "Выполненные скрипты">
