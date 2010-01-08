@@ -22,17 +22,25 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+const Cc = Components.classes;
+const Ci = Components.interfaces;
+const Cu = Components.utils;
 
-const debuggerService = Components.classes["@mozilla.org/js/jsd/debugger-service;1"]
-                                  .getService(Components.interfaces.jsdIDebuggerService);
-const ioService = Components.classes["@mozilla.org/network/io-service;1"]
-                            .getService(Components.interfaces.nsIIOService);
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+
+const debuggerService = Cc["@mozilla.org/js/jsd/debugger-service;1"].getService(Ci.jsdIDebuggerService);
+const ioService = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
+const threadManager = Cc["@mozilla.org/thread-manager;1"].getService(Ci.nsIThreadManager);
+const prefService = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefBranch);
+const JSONServ = Cc["@mozilla.org/dom/json;1"].getService(Ci.nsIJSON);
+
 var appDir, profDir;
 var executedScripts = {__proto__: null};
 var debuggerWasOn = false;
 var debuggerOldFlags;
 var filters = {include: [], exclude: []};
+var queue = null;
+var queuedScripts = null;
 
 var paused = false;
 
@@ -72,23 +80,20 @@ function start()
   }
 
   // Determine location of profile and application directory (scripts located there shouldn't be shown)
-  let ioServ = Components.classes["@mozilla.org/network/io-service;1"]
-                         .getService(Components.interfaces.nsIIOService);
-  let dirServ = Components.classes["@mozilla.org/file/directory_service;1"]
-                          .getService(Components.interfaces.nsIProperties);
+  let dirServ = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties);
   function getDirURL(key)
   {
     try
     {
-      let file = dirServ.get(key, Components.interfaces.nsIFile);
-      return ioServ.newFileURI(file).spec.toLowerCase().replace(/\/+/g, "/");
+      let file = dirServ.get(key, Ci.nsIFile);
+      return ioService.newFileURI(file).spec.toLowerCase().replace(/\/+/g, "/");
     }
     catch (e)
     {
       return null;
     }
   }
-  appDir = getDirURL("GreD");
+  appDir = getDirURL("CurProcD");
   profDir = getDirURL("ProfD");
 
   updateFiltersUI();
@@ -103,7 +108,7 @@ function start()
   debuggerService.topLevelHook = scriptHook;
 
   debuggerOldFlags = debuggerService.flags;
-  debuggerService.flags = debuggerOldFlags | Components.interfaces.jsdIDebuggerService.DISABLE_OBJECT_TRACE;
+  debuggerService.flags = debuggerOldFlags | Ci.jsdIDebuggerService.DISABLE_OBJECT_TRACE;
 }
 
 function stop()
@@ -122,12 +127,13 @@ function updateFiltersUI()
   // Read out JSON preference
   try
   {
-    let prefService = Components.classes["@mozilla.org/preferences-service;1"]
-                                .getService(Components.interfaces.nsIPrefBranch);
-    filters = Components.classes["@mozilla.org/dom/json;1"]
-                         .getService(Components.interfaces.nsIJSON)
-                         .decode(prefService.getCharPref("extensions.jsdeobfuscator.filters"));
-  } catch(e) { return; };
+    filters = JSONServ.decode(prefService.getCharPref("extensions.jsdeobfuscator.filters"));
+  }
+  catch(e)
+  {
+    Components.utils.reportError(e);
+    return;
+  }
 
   for each (let type in ["include", "exclude"])
   {
@@ -156,24 +162,120 @@ function checkMatch(fileName, filters)
   return false;
 }
 
-function addScript(action, script)
+function processAction(action, script)
 {
   if (paused)
     return;
 
-  // Check filters first
-  if (filters.include.length && !checkMatch(script.fileName, filters.include))
-    return;
-  if (checkMatch(script.fileName, filters.exclude))
-    return;
-
-  // Don't show script execution twice
-  if (action == "executed" && script.tag in executedScripts)
+  // For returns accept only known scripts. For other actions check filters.
+  if (action == "returned")
   {
-    updateExecutedScript(script, false);
-    return;
+    if (!(script.tag in executedScripts) && (!queuedScripts || !(script.tag in queuedScripts)))
+      return;
+  }
+  else
+  {
+    if (filters.include.length && !checkMatch(script.fileName, filters.include))
+      return;
+    if (checkMatch(script.fileName, filters.exclude))
+      return;
   }
 
+  if (!queue)
+  {
+    queue = [];
+    queuedScripts = {__proto__: null};
+    setTimeout(processQueue, 100);
+  }
+
+  if (script.tag in queuedScripts)
+  {
+    queuedScripts[script.tag].actions.push([action, new Date()]);
+  }
+  else
+  {
+    // Have to get the source now, top-level scripts will be gone later
+    let source = (script.tag in executedScripts ? null : script.functionSource);
+    let entry = {script: script, source: source, actions: [[action, new Date()]]};
+    queue.push(entry);
+    queuedScripts[script.tag] = entry;
+  }
+}
+
+function processQueue()
+{
+  let compiledFrame = document.getElementById("compiled-frame").contentWindow;
+  let executedFrame = document.getElementById("executed-frame").contentWindow;
+  let needScrollCompiled = (compiledFrame.scrollY >= compiledFrame.scrollMaxY - 10);
+  let needScrollExecuted = (executedFrame.scrollY >= executedFrame.scrollMaxY - 10);
+
+  let updateNeeded = {__proto__: null};
+
+  let scripts = queue;
+  queue = null;
+  queuedScripts = null;
+  for each (let entry in scripts)
+  {
+    let script = entry.script;
+    for each (let [action, time] in entry.actions)
+    {
+      switch (action)
+      {
+        case "compiled":
+          addScript(compiledFrame, script, entry.source, time);
+          break;
+        case "executed":
+          // Update existing entry for known scripts
+          if (script.tag in executedScripts)
+          {
+            let scriptData = executedScripts[script.tag];
+            if (typeof scriptData.executionTime != "undefined")
+            {
+              if (scriptData.calls != scriptData.returns)
+                scriptData.executionTime = undefined;
+              else
+                scriptData.startTime = time.getTime();
+            }
+            scriptData.calls++;
+            updateNeeded[script.tag] = scriptData;
+          }
+          else
+          {
+            executedScripts[script.tag] = {
+              entry: addScript(executedFrame, script, entry.source, time),
+              startTime: time.getTime(),
+              calls: 1,
+              returns: 0,
+              executionTime: 0
+            };
+          }
+          break;
+        case "returned":
+          let scriptData = executedScripts[script.tag];
+          if (scriptData.startTime)
+          {
+            scriptData.returns++;
+            if (typeof scriptData.executionTime != "undefined")
+              scriptData.executionTime += time.getTime() - scriptData.startTime;
+            scriptData.startTime = 0;
+            updateNeeded[script.tag] = scriptData;
+          }
+          break;
+      }
+    }
+  }
+
+  for each (let scriptData in updateNeeded)
+    updateExecutedScript(scriptData);
+
+  if (needScrollCompiled)
+    compiledFrame.scrollTo(compiledFrame.scrollX, compiledFrame.scrollMaxY);
+  if (needScrollExecuted)
+    executedFrame.scrollTo(executedFrame.scrollX, executedFrame.scrollMaxY);
+}
+
+function addScript(frame, script, source, time)
+{
   let fileURI = script.fileName;
   try
   {
@@ -181,72 +283,29 @@ function addScript(action, script)
     fileURI = ioService.newURI(fileURI, null, null).spec;
   } catch(e) {}
 
-  let frame = document.getElementById(action + "-frame");
-  let needScroll = (frame.contentWindow.scrollY >= frame.contentWindow.scrollMaxY - 10);
-
-  let doc = document.getElementById(action + "-frame").contentDocument;
+  let doc = frame.document;
 
   let template = doc.getElementById("template");
   let entry = template.cloneNode(true);
   entry.removeAttribute("id");
-  entry.getElementsByClassName("time")[0].textContent = getTime();
+  entry.getElementsByClassName("time")[0].textContent = formatTime(time);
   entry.getElementsByClassName("scriptLine")[0].textContent = script.baseLineNumber;
-  entry.getElementsByClassName("scriptText")[0].textContent = script.functionSource;
+  entry.getElementsByClassName("scriptText")[0].textContent = source;
 
   let scriptURLNode = entry.getElementsByClassName("scriptURL")[0];
   scriptURLNode.href = scriptURLNode.textContent = fileURI;
   scriptURLNode.lineNum = script.baseLineNumber;
 
   template.parentNode.appendChild(entry);
-
-  if (action == "executed")
-  {
-    executedScripts[script.tag] = {
-      entry: entry,
-      startTime: Date.now(),
-      calls: 1,
-      returns: 0,
-      executionTime: 0
-    };
-  }
-
-  if (needScroll)
-    frame.contentWindow.scrollTo(frame.contentWindow.scrollX, frame.contentWindow.scrollMaxY);
+  return entry;
 }
 
-function updateExecutedScript(script, isReturn)
+function updateExecutedScript(scriptData)
 {
-  let scriptData = executedScripts[script.tag];
-  if (!scriptData)
-    return;
-
-  if (isReturn)
-  {
-    if (scriptData.startTime)
-    {
-      scriptData.returns++;
-      if (typeof scriptData.executionTime != "undefined")
-        scriptData.executionTime += Date.now() - scriptData.startTime;
-      scriptData.startTime = 0;
-    }
-  }
-  else
-  {
-    if (typeof scriptData.executionTime != "undefined")
-    {
-      if (scriptData.calls != scriptData.returns)
-        scriptData.executionTime = undefined;
-      else
-        scriptData.startTime = Date.now();
-    }
-    scriptData.calls++;
-  }
-
   if (scriptData.returns > 0)
   {
     let entry = scriptData.entry;
     let wnd = entry.ownerDocument.defaultView;
-    let needScroll = (wnd.scrollY >= wnd.scrollMaxY - 10);
 
     entry.getElementsByClassName("numCalls")[0].textContent = scriptData.returns;
 
@@ -257,9 +316,6 @@ function updateExecutedScript(script, isReturn)
       avgTime.textContent = avgTime.getAttribute("recursion");
 
     entry.getElementsByClassName("stats")[0].removeAttribute("style");
-
-    if (needScroll)
-      wnd.scrollTo(wnd.scrollX, wnd.scrollMaxY);
   }
 }
 
@@ -267,22 +323,22 @@ function clearList()
 {
   for each (let frameId in ["compiled-frame", "executed-frame"])
   {
-    let dummy = document.getElementById(frameId).contentDocument.getElementById("dummy");
-    while (dummy.nextSibling)
-      dummy.parentNode.removeChild(dummy.nextSibling);
-      
-    executedScripts = {__proto__: null};
+    let doc = document.getElementById(frameId).contentDocument;
+    let dummy = doc.getElementById("dummy");
+    let range = doc.createRange();
+    range.setStartAfter(dummy);
+    range.setEndAfter(dummy.parentNode.lastChild);
+    range.deleteContents();
   }
+  executedScripts = {__proto__: null};
 }
 
 // HACK: Using a string bundle to format a time. Unfortunately, format() function isn't
 // exposed in any other way (bug 451360).
-var timeFormat = Components.classes["@mozilla.org/intl/stringbundle;1"]
-                           .getService(Components.interfaces.nsIStringBundleService)
+var timeFormat = Cc["@mozilla.org/intl/stringbundle;1"].getService(Ci.nsIStringBundleService)
                            .createBundle("data:text/plain,format=" + encodeURIComponent("%02S:%02S:%02S.%03S"));
-function getTime()
+function formatTime(time)
 {
-  let time = new Date();
   return timeFormat.formatStringFromName("format", [time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds()], 4);
 }
 
@@ -310,7 +366,10 @@ function updateContext()
       let controller = document.commandDispatcher.getControllerForCommand("cmd_" + command);
       enabled = (controller && controller.isCommandEnabled("cmd_" + command));
     }
-    catch (e) {}
+    catch(e)
+    {
+      Components.utils.reportError(e);
+    }
 
     document.getElementById("context-" + command).setAttribute("disabled", !enabled);
   }
@@ -329,7 +388,10 @@ function execCommand(command)
     if (controller && controller.isCommandEnabled(command))
       controller.doCommand(command);
   }
-  catch (e) {}
+  catch(e)
+  {
+    Components.utils.reportError(e);
+  }
 }
 
 function selectAll(anchor)
@@ -375,15 +437,15 @@ function editFilters()
     // Save preferences
     try
     {
-      let prefService = Components.classes["@mozilla.org/preferences-service;1"]
-                                  .getService(Components.interfaces.nsIPrefBranch);
-      let json = Components.classes["@mozilla.org/dom/json;1"]
-                           .getService(Components.interfaces.nsIJSON)
-                           .encode(result);
+      let json = JSONServ.encode(result);
       prefService.setCharPref("extensions.jsdeobfuscator.filters", json);
-      prefService.QueryInterface(Components.interfaces.nsIPrefService).savePrefFile(null);
+      prefService.QueryInterface(Ci.nsIPrefService).savePrefFile(null);
       updateFiltersUI();
-    } catch(e) {};
+    }
+    catch(e)
+    {
+      Components.utils.reportError(e);
+    }
   }
 }
 
@@ -391,29 +453,32 @@ function resetFilters()
 {
   try
   {
-    let prefService = Components.classes["@mozilla.org/preferences-service;1"]
-                                .getService(Components.interfaces.nsIPrefBranch);
     prefService.clearUserPref("extensions.jsdeobfuscator.filters");
-      updateFiltersUI();
-  } catch(e) {};
+    prefService.QueryInterface(Ci.nsIPrefService).savePrefFile(null);
+    updateFiltersUI();
+  }
+  catch(e)
+  {
+    Components.utils.reportError(e);
+  }
 }
 
 var scriptHook =
 {
   onScriptCreated: function(script)
   {
-    addScript("compiled", script);
+    processAction("compiled", script);
   },
   onScriptDestroyed: function(script)
   {
   },
   onCall: function(frame, type)
   {
-    if (type == Components.interfaces.jsdICallHook.TYPE_TOPLEVEL_START || type == Components.interfaces.jsdICallHook.TYPE_FUNCTION_CALL)
-      addScript("executed", frame.script);
-    else if (type == Components.interfaces.jsdICallHook.TYPE_TOPLEVEL_END || type == Components.interfaces.jsdICallHook.TYPE_FUNCTION_RETURN)
-      updateExecutedScript(frame.script, true);
+    if (type == Ci.jsdICallHook.TYPE_TOPLEVEL_START || type == Ci.jsdICallHook.TYPE_FUNCTION_CALL)
+      processAction("executed", frame.script);
+    else if (type == Ci.jsdICallHook.TYPE_TOPLEVEL_END || type == Ci.jsdICallHook.TYPE_FUNCTION_RETURN)
+      processAction("returned", frame.script);
   },
   prevScript: null,
-  QueryInterface: XPCOMUtils.generateQI([Components.interfaces.jsdIScriptHook, Components.interfaces.jsdICallHook])
+  QueryInterface: XPCOMUtils.generateQI([Ci.jsdIScriptHook, Ci.jsdICallHook])
 }
