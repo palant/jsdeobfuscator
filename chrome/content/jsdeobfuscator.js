@@ -40,7 +40,6 @@ var debuggerWasOn = false;
 var debuggerOldFlags;
 var filters = {include: [], exclude: []};
 var queue = null;
-var queuedScripts = null;
 
 var paused = false;
 
@@ -170,7 +169,7 @@ function processAction(action, script)
   // For returns accept only known scripts. For other actions check filters.
   if (action == "returned")
   {
-    if (!(script.tag in executedScripts) && (!queuedScripts || !(script.tag in queuedScripts)))
+    if (!(script.tag in executedScripts))
       return;
   }
   else
@@ -184,22 +183,17 @@ function processAction(action, script)
   if (!queue)
   {
     queue = [];
-    queuedScripts = {__proto__: null};
     setTimeout(processQueue, 100);
   }
 
-  if (script.tag in queuedScripts)
-  {
-    queuedScripts[script.tag].actions.push([action, new Date()]);
-  }
-  else
-  {
-    // Have to get the source now, top-level scripts will be gone later
-    let source = (script.tag in executedScripts ? null : script.functionSource);
-    let entry = {script: script, source: source, actions: [[action, new Date()]]};
-    queue.push(entry);
-    queuedScripts[script.tag] = entry;
-  }
+  // Get the script source now, it might be gone later :-(
+  let source = null;
+  if (action == "compiled" || (action == "executed" && !(script.tag in executedScripts)))
+    source = script.functionSource;
+
+  queue.push([action, script, source, new Date()]);
+  if (action == "executed" && !(script.tag in executedScripts))
+    executedScripts[script.tag] = null;
 }
 
 function processQueue()
@@ -213,54 +207,55 @@ function processQueue()
 
   let scripts = queue;
   queue = null;
-  queuedScripts = null;
-  for each (let entry in scripts)
+  for each (let [action, script, source, time] in scripts)
   {
-    let script = entry.script;
-    for each (let [action, time] in entry.actions)
+    switch (action)
     {
-      switch (action)
+      case "compiled":
       {
-        case "compiled":
-          addScript(compiledFrame, script, entry.source, time);
-          break;
-        case "executed":
-          // Update existing entry for known scripts
-          if (script.tag in executedScripts)
+        addScript(compiledFrame, script, source, time);
+        break;
+      }
+      case "executed":
+      {
+        // Update existing entry for known scripts
+        let scriptData = (script.tag in executedScripts ? executedScripts[script.tag] : null);
+        if (scriptData)
+        {
+          if (typeof scriptData.executionTime != "undefined")
           {
-            let scriptData = executedScripts[script.tag];
-            if (typeof scriptData.executionTime != "undefined")
-            {
-              if (scriptData.calls != scriptData.returns)
-                scriptData.executionTime = undefined;
-              else
-                scriptData.startTime = time.getTime();
-            }
-            scriptData.calls++;
-            updateNeeded[script.tag] = scriptData;
+            if (scriptData.calls != scriptData.returns)
+              scriptData.executionTime = undefined;
+            else
+              scriptData.startTime = time.getTime();
           }
-          else
-          {
-            executedScripts[script.tag] = {
-              entry: addScript(executedFrame, script, entry.source, time),
-              startTime: time.getTime(),
-              calls: 1,
-              returns: 0,
-              executionTime: 0
-            };
-          }
-          break;
-        case "returned":
-          let scriptData = executedScripts[script.tag];
-          if (scriptData.startTime)
-          {
-            scriptData.returns++;
-            if (typeof scriptData.executionTime != "undefined")
-              scriptData.executionTime += time.getTime() - scriptData.startTime;
-            scriptData.startTime = 0;
-            updateNeeded[script.tag] = scriptData;
-          }
-          break;
+          scriptData.calls++;
+          updateNeeded[script.tag] = scriptData;
+        }
+        else
+        {
+          executedScripts[script.tag] = {
+            entry: addScript(executedFrame, script, source, time),
+            startTime: time.getTime(),
+            calls: 1,
+            returns: 0,
+            executionTime: 0
+          };
+        }
+        break;
+      }
+      case "returned":
+      {
+        let scriptData = executedScripts[script.tag];
+        if (scriptData.startTime)
+        {
+          scriptData.returns++;
+          if (typeof scriptData.executionTime != "undefined")
+            scriptData.executionTime += time.getTime() - scriptData.startTime;
+          scriptData.startTime = 0;
+          updateNeeded[script.tag] = scriptData;
+        }
+        break;
       }
     }
   }
