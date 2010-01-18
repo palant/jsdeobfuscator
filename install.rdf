@@ -7,7 +7,7 @@
   
   <em:id>jsdeobfuscator@adblockplus.org</em:id>
   <em:version>{{VERSION}}</em:version>
-  <em:name>JavaScript Deobfuscator</em:name>
+  <em:name>{{NAME}}</em:name>
   <em:description>{{DESCRIPTION}}</em:description>
   <em:creator>Wladimir Palant</em:creator>
 
