@@ -1,0 +1,6 @@
+<!ENTITY dummy.text "Nenhum script a ser exibido, tente abrir uma página web.">
+<!ENTITY url.label "Script:">
+<!ENTITY line.label "Linha:">
+<!ENTITY numCalls.label "Número de chamadas:">
+<!ENTITY avgTime.label "Tempo médio de execução (ms):">
+<!ENTITY recursion.label "recorrência descoberta">

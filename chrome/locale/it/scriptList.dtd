@@ -1,0 +1,6 @@
+<!ENTITY dummy.text "Nessuno script da visualizzare, provare ad aprire un sito web">
+<!ENTITY url.label "Script:">
+<!ENTITY line.label "Riga:">
+<!ENTITY numCalls.label "Numero di chiamate:">
+<!ENTITY avgTime.label "Millisecondi di esecuzione in media:">
+<!ENTITY recursion.label "(rilevato algoritmo ricorsivo)">

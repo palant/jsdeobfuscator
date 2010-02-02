@@ -1,0 +1,3 @@
+<!ENTITY window.title "Script da includere/escludere">
+<!ENTITY include.label "Script da includere (uno per riga, lasciare vuoto per 'tutti')">
+<!ENTITY exclude.label "Script da escludere (uno per riga, lasciare vuoto per 'nessuno')">

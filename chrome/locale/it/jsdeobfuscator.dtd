@@ -1,0 +1,24 @@
+<!ENTITY window.title "JavaScript Deobfuscator">
+<!ENTITY window.description "Nel riquadro qui sotto sono presenti gli script compilati o eseguiti quando si apre un sito web">
+<!ENTITY clear.label "Elimina tutto">
+<!ENTITY clear.accesskey "E">
+<!ENTITY pause.label "Interrompi rilevamento script">
+<!ENTITY pause.accesskey "I">
+<!ENTITY includeFilters.label "Includi i seguenti script:">
+<!ENTITY excludeFilters.label "Escludi i seguenti script:">
+<!ENTITY include.all.label "tutti">
+<!ENTITY exclude.none.label "nessuno">
+<!ENTITY editFilters.label "Script da includere/escludere…">
+<!ENTITY editFilters.accesskey "d">
+<!ENTITY resetFilters.label "Ripristina predefiniti">
+<!ENTITY resetFilters.accesskey "R">
+<!ENTITY copyCmd.label "Copia">
+<!ENTITY copyCmd.accesskey "C">
+<!ENTITY copyLinkCmd.label "Copia indirizzo">
+<!ENTITY copyLinkCmd.accesskey "o">
+<!ENTITY selectAllCmd.label "Seleziona tutto">
+<!ENTITY selectAllCmd.accesskey "S">
+<!ENTITY findCmd.label "Trova">
+<!ENTITY findCmd.accesskey "T">
+<!ENTITY compiled.scripts.label "Script compilati">
+<!ENTITY executed.scripts.label "Script eseguiti">
