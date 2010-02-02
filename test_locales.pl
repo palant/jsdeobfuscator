@@ -23,6 +23,7 @@ my @mustDiffer = (
 my @ignoreUntranslated = (
   quotemeta("jsd:jsdeobfuscator:window.title"),
   quotemeta("jsd:overlay:menuitem.label"),
+  quotemeta("jsd:scriptList:url.label"),
   quotemeta("jsd:meta:name"),
 );
 
