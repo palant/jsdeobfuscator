@@ -1,0 +1,15 @@
+[general]
+id=jsdeobfuscator@adblockplus.org
+basename=jsdeobfuscator
+branchname=JAVASCRIPT_DEOBFUSCATOR
+version=1.5.5
+author=Wladimir Palant
+
+[homepage]
+default=https://addons.mozilla.org/addon/10345/
+
+[compat]
+firefox=3.5/4.0b8pre
+seamonkey=2.0/2.1b2
+songbird=1.4.0/1.9.0a
+toolkit=1.9.1/2.0b8pre
