@@ -1,1 +1,1 @@
-pref("extensions.jsdeobfuscator.filters", "{\"include\":[],\"exclude\":[\"chrome://\",\"%APPDIR%\",\"%PROFILEDIR%\",\"XStringBundle\",\"XPCSafeJSObjectWrapper.cpp\"]}");
+pref("extensions.jsdeobfuscator.filters", "{\"include\":[],\"exclude\":[\"chrome://\",\"resource://\",\"%APPDIR%\",\"jar:%APPDIR%\",\"%PROFILEDIR%\",\"jar:%PROFILEDIR%\",\"XStringBundle\",\"XPCSafeJSObjectWrapper.cpp\"]}");
