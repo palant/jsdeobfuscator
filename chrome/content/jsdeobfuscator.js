@@ -100,14 +100,34 @@ function start()
   // Initialize debugger
   debuggerWasOn = debuggerService.isOn;
   if (!debuggerWasOn)
-    debuggerService.on();
+  {
+    if ("asyncOn" in debuggerService)
+    {
+      // Gecko 2.0 branch
+      debuggerService.asyncOn({onDebuggerActivated: onDebuggerActivated});
+    }
+    else
+    {
+      // Gecko 1.9.x branch
+      debuggerService.on();
+      onDebuggerActivated();
+    }
+  }
+  else
+    onDebuggerActivated();
+}
 
+function onDebuggerActivated()
+{
   debuggerService.scriptHook = scriptHook;
   debuggerService.functionHook = scriptHook;
   debuggerService.topLevelHook = scriptHook;
 
-  debuggerOldFlags = debuggerService.flags;
-  debuggerService.flags = debuggerOldFlags | Ci.jsdIDebuggerService.DISABLE_OBJECT_TRACE;
+  if ("DISABLE_OBJECT_TRACE" in Ci.jsdIDebuggerService)
+  {
+    debuggerOldFlags = debuggerService.flags;
+    debuggerService.flags = debuggerOldFlags | Ci.jsdIDebuggerService.DISABLE_OBJECT_TRACE;
+  }
 }
 
 function stop()
