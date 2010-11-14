@@ -123,11 +123,8 @@ function onDebuggerActivated()
   debuggerService.functionHook = scriptHook;
   debuggerService.topLevelHook = scriptHook;
 
-  if ("DISABLE_OBJECT_TRACE" in Ci.jsdIDebuggerService)
-  {
-    debuggerOldFlags = debuggerService.flags;
-    debuggerService.flags = debuggerOldFlags | Ci.jsdIDebuggerService.DISABLE_OBJECT_TRACE;
-  }
+  debuggerOldFlags = debuggerService.flags;
+  debuggerService.flags = ("DISABLE_OBJECT_TRACE" in Ci.jsdIDebuggerService ? Ci.jsdIDebuggerService.DISABLE_OBJECT_TRACE : 0);
 }
 
 function stop()
