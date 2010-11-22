@@ -51,12 +51,12 @@
   </commandset>
 
   <popupset id="deobfuscator-popupset">
-    <popup id="browser-context" onpopupshowing="updateContext();">
+    <menupopup id="browser-context" onpopupshowing="updateContext();">
       <menuitem id="context-copy" label="&copyCmd.label;" accesskey="&copyCmd.accesskey;" oncommand="execCommand('cmd_copy');"/>
       <menuitem id="context-copyLink" label="&copyLinkCmd.label;" accesskey="&copyLinkCmd.accesskey;" oncommand="execCommand('cmd_copyLink');"/>
       <menuitem id="context-selectAll" label="&selectAllCmd.label;" accesskey="&selectAllCmd.accesskey;" oncommand="selectAll(document.popupNode);"/>
       <menuitem id="context-find" label="&findCmd.label;" accesskey="&findCmd.accesskey;" command="find-command" key="find-key"/>
-    </popup>
+    </menupopup>
   </popupset>
 
   <dialogheader id="description" title="&window.description;"/>
