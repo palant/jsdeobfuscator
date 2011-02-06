@@ -10,6 +10,6 @@ default=https://addons.mozilla.org/addon/10345/
 
 [compat]
 firefox=3.5/4.0.*
-seamonkey=2.0/2.1b2
+seamonkey=2.0/2.1b3
 songbird=1.4.0/1.9.0a
 toolkit=1.9.1/2.0b8pre
