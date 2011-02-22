@@ -1,0 +1,6 @@
+<!ENTITY dummy.text "没有脚本来显示，尝试打开一个网站。">
+<!ENTITY url.label "脚本:">
+<!ENTITY line.label "行:">
+<!ENTITY numCalls.label "调用的编号:">
+<!ENTITY avgTime.label "平均执行时间 (ms):">
+<!ENTITY recursion.label "递归检测">

@@ -1,0 +1,3 @@
+<!ENTITY window.title "修改过滤器">
+<!ENTITY include.label "包括脚本 (每行一个前缀，空表示“所有”)：">
+<!ENTITY exclude.label "排除脚本 (每行一个前缀，空表示“没有”)：">

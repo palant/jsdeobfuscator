@@ -1,0 +1,24 @@
+<!ENTITY window.title "JavaScript Deobfuscator">
+<!ENTITY window.description "Här nedanför kommer du att se alla skript som kompileras eller körs medan detta fönster är öppet.">
+<!ENTITY clear.label "Rensa">
+<!ENTITY clear.accesskey "e">
+<!ENTITY pause.label "Pausa inspelning">
+<!ENTITY pause.accesskey "P">
+<!ENTITY includeFilters.label "Inkludera skript:">
+<!ENTITY excludeFilters.label "Undanta skript:">
+<!ENTITY include.all.label "alla">
+<!ENTITY exclude.none.label "inget">
+<!ENTITY editFilters.label "Ändra filter...">
+<!ENTITY editFilters.accesskey "f">
+<!ENTITY resetFilters.label "Återställ standard">
+<!ENTITY resetFilters.accesskey "d">
+<!ENTITY copyCmd.label "Kopiera">
+<!ENTITY copyCmd.accesskey "K">
+<!ENTITY copyLinkCmd.label "Kopiera länkplats">
+<!ENTITY copyLinkCmd.accesskey "l">
+<!ENTITY selectAllCmd.label "Markera alla">
+<!ENTITY selectAllCmd.accesskey "a">
+<!ENTITY findCmd.label "Sök...">
+<!ENTITY findCmd.accesskey "S">
+<!ENTITY compiled.scripts.label "Kompilerade skript">
+<!ENTITY executed.scripts.label "Körda skript">

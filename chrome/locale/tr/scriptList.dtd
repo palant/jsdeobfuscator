@@ -1,0 +1,6 @@
+<!ENTITY dummy.text "Gösterilecek kod yok, bir sayfa açın.">
+<!ENTITY url.label "Kod:">
+<!ENTITY line.label "Satır:">
+<!ENTITY numCalls.label "Çağırılma sayısı">
+<!ENTITY avgTime.label "Ortalama çalıştırma süresi (ms)">
+<!ENTITY recursion.label "tekrarlama farkedildi">

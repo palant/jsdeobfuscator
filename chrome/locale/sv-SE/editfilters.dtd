@@ -1,0 +1,3 @@
+<!ENTITY window.title "Ändra filter">
+<!ENTITY include.label "Skript att inkludera (ett prefix per rad, lämna tomt för &quot;alla&quot;):">
+<!ENTITY exclude.label "Skript att undanta (ett prefix per rad, lämna tomt för &quot;inget&quot;):">
