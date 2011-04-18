@@ -36,4 +36,8 @@
   <menupopup id="toolsPopup">
     <menuitem id="jsdeobfuscator-menuitem" insertafter="javascriptConsole" label="&menuitem.label;"/>
   </menupopup>
+
+  <menupopup id="appmenu_webDeveloper_popup">
+    <menuitem id="appmenu_jsdeobfuscator" insertafter="appmenu_errorConsole" label="&menuitem.label;"/>
+  </menupopup>
 </overlay>
