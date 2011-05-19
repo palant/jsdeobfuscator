@@ -9,7 +9,7 @@ author=Wladimir Palant
 default=https://addons.mozilla.org/addon/10345/
 
 [compat]
-firefox=3.5/6.0a1
+firefox=3.5/6.0a2
 seamonkey=2.0/2.2a1pre
 songbird=1.4.0/1.10.0a
 toolkit=1.9.1/2.0b8pre
