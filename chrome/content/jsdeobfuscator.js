@@ -32,7 +32,6 @@ const debuggerService = Cc["@mozilla.org/js/jsd/debugger-service;1"].getService(
 const ioService = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
 const threadManager = Cc["@mozilla.org/thread-manager;1"].getService(Ci.nsIThreadManager);
 const prefService = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefBranch);
-const JSONServ = Cc["@mozilla.org/dom/json;1"].getService(Ci.nsIJSON);
 
 var appDir, profDir;
 var executedScripts = {__proto__: null};
@@ -143,7 +142,7 @@ function updateFiltersUI()
   // Read out JSON preference
   try
   {
-    filters = JSONServ.decode(prefService.getCharPref("extensions.jsdeobfuscator.filters"));
+    filters = JSON.parse(prefService.getCharPref("extensions.jsdeobfuscator.filters"));
   }
   catch(e)
   {
@@ -253,12 +252,14 @@ function processQueue()
         {
           executedScripts[script.tag] = {
             entry: addScript(executedFrame, script, source, time),
+            source: source,
             startTime: time.getTime(),
             calls: 1,
             returns: 0,
             executionTime: 0
           };
         }
+        dump(executedScripts[script.tag].source + "\n\n");
         break;
       }
       case "returned":
@@ -449,8 +450,7 @@ function editFilters()
     // Save preferences
     try
     {
-      let json = JSONServ.encode(result);
-      prefService.setCharPref("extensions.jsdeobfuscator.filters", json);
+      prefService.setCharPref("extensions.jsdeobfuscator.filters", JSON.stringify(result));
       prefService.QueryInterface(Ci.nsIPrefService).savePrefFile(null);
       updateFiltersUI();
     }
