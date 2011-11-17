@@ -259,7 +259,6 @@ function processQueue()
             executionTime: 0
           };
         }
-        dump(executedScripts[script.tag].source + "\n\n");
         break;
       }
       case "returned":
