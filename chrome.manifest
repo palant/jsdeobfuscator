@@ -1,4 +1,2 @@
-overlay   chrome://browser/content/browser.xul chrome://jsdeobfuscator/content/overlay.xul
-overlay   chrome://navigator/content/navigatorOverlay.xul chrome://jsdeobfuscator/content/overlay.xul
-content   jsdeobfuscator jar:chrome/jsdeobfuscator.jar!/content/
-locale    jsdeobfuscator {{LOCALE}} jar:chrome/jsdeobfuscator.jar!/locale/{{LOCALE}}/
+content   jsdeobfuscator chrome/content/
+locale    jsdeobfuscator {{LOCALE}} chrome/locale/{{LOCALE}}/
