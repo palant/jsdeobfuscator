@@ -24,6 +24,7 @@ function startup(params, reason)
   scope.loadDefaultPrefs(params.installPath);
 
   WindowObserver.init();
+  CommandLineHandler.init();
 }
 
 function shutdown(params, reason)
@@ -31,6 +32,7 @@ function shutdown(params, reason)
   if (Services.vc.compare(Services.appinfo.platformVersion, "10.0") < 0)
     Components.manager.removeBootstrappedManifestLocation(params.installPath);
 
+  CommandLineHandler.shutdown();
   WindowObserver.shutdown();
 
   let editWnd = Services.wm.getMostRecentWindow("jsdeobfuscator:editfilters");
@@ -168,3 +170,58 @@ var WindowObserver =
 WindowObserver.popupShowingHandler = WindowObserver.popupShowingHandler.bind(WindowObserver);
 WindowObserver.popupHidingHandler = WindowObserver.popupHidingHandler.bind(WindowObserver);
 WindowObserver.popupCommandHandler = WindowObserver.popupCommandHandler.bind(WindowObserver);
+
+var CommandLineHandler =
+{
+  initialized: false,
+
+  classDescription: "d-jsdeobfuscator",
+  contractID: "@adblockplus.org/jsdeobfuscator/cmdline;1",
+  classID: Components.ID("{b3d54270-b335-11de-8a39-0800200c9a66}"),
+  xpcom_categories: ["command-line-handler"],
+
+  init: function()
+  {
+    if (this.initialized)
+      return;
+    this.initialized = true;
+
+    let registrar = Components.manager.QueryInterface(Ci.nsIComponentRegistrar);
+    registrar.registerFactory(this.classID, this.classDescription, this.contractID, this);
+
+    let catMan = Cc["@mozilla.org/categorymanager;1"].getService(Ci.nsICategoryManager);
+    for each (let category in this.xpcom_categories)
+      catMan.addCategoryEntry(category, this.classDescription, this.contractID, false, true);
+  },
+
+  shutdown: function()
+  {
+    if (!this.initialized)
+      return;
+    this.initialized = false;
+
+    let registrar = Components.manager.QueryInterface(Ci.nsIComponentRegistrar);
+    registrar.unregisterFactory(this.classID, this);
+
+    let catMan = Cc["@mozilla.org/categorymanager;1"].getService(Ci.nsICategoryManager);
+    for each (let category in this.xpcom_categories)
+      catMan.deleteCategoryEntry(category, this.classDescription, false);
+  },
+
+  createInstance: function(outer, iid)
+  {
+    if (outer)
+      throw Cr.NS_ERROR_NO_AGGREGATION;
+    return this.QueryInterface(iid);
+  },
+
+  helpInfo: "  -jsdeobfuscator      Open JavaScript Deobfuscator window\n",
+
+  handle: function(cmdline)
+  {
+    if (cmdline.handleFlag("jsdeobfuscator", false))
+      Services.ww.openWindow(null, "chrome://jsdeobfuscator/content/jsdeobfuscator.xul", "_blank", "chrome,resizable,centerscreen,dialog=no", null);
+  },
+
+  QueryInterface: XPCOMUtils.generateQI([Ci.nsICommandLineHandler, Ci.nsIFactory])
+};
