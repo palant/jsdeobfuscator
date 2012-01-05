@@ -41,10 +41,10 @@ function shutdown(params, reason)
   let deobfuscatorWnd = Services.wm.getMostRecentWindow("jsdeobfuscator:main");
   if (deobfuscatorWnd)
   {
-    deobfuscatorWnd.close();
-
     // Closing immediately won't work if modal edit dialog was open
     deobfuscatorWnd.setTimeout("window.close();", 0);
+
+    deobfuscatorWnd.close();
   }
 }
 
