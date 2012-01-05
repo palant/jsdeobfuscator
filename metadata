@@ -2,7 +2,7 @@
 id=jsdeobfuscator@adblockplus.org
 basename=jsdeobfuscator
 branchname=JAVASCRIPT_DEOBFUSCATOR
-version=1.6b
+version=1.6
 author=Wladimir Palant
 restartless=true
 nojar=true
