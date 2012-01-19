@@ -113,7 +113,8 @@ var WindowObserver =
 
   get menuItem()
   {
-    let stringBundle = Services.strings.createBundle("chrome://jsdeobfuscator/locale/global.properties");
+    // Randomize URI to work around bug 719376
+    let stringBundle = Services.strings.createBundle("chrome://jsdeobfuscator/locale/global.properties?" + Math.random());
     let result = stringBundle.GetStringFromName("menuitem.label");
 
     delete this.menuItem;
