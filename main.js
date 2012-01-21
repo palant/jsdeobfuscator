@@ -14,7 +14,7 @@ let {Prefs} = require("prefs");
 let {WindowObserver} = require("windowObserver");
 let {CommandLineHandler} = require("commandLineHandler");
 
-let AppIntegration = exports.AppIntegration =
+let Main = exports.Main =
 {
   initialized: false,
 
@@ -115,6 +115,6 @@ let AppIntegration = exports.AppIntegration =
   }
 };
 
-AppIntegration.popupShowingHandler = AppIntegration.popupShowingHandler.bind(AppIntegration);
-AppIntegration.popupHidingHandler = AppIntegration.popupHidingHandler.bind(AppIntegration);
-AppIntegration.popupCommandHandler = AppIntegration.popupCommandHandler.bind(AppIntegration);
+Main.popupShowingHandler = Main.popupShowingHandler.bind(Main);
+Main.popupHidingHandler = Main.popupHidingHandler.bind(Main);
+Main.popupCommandHandler = Main.popupCommandHandler.bind(Main);
