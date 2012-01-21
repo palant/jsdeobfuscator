@@ -20,6 +20,7 @@
     height="500"
     persist="screenX screenY width height sizemode"
     windowtype="jsdeobfuscator:main">
+  <script type="application/x-javascript;version=1.7" src="common.js"/>
   <script type="application/x-javascript;version=1.7" src="jsdeobfuscator.js"/>
 
   <keyset id="deobfuscator-keys">

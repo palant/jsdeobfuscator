@@ -4,22 +4,16 @@
  * http://mozilla.org/MPL/2.0/.
  */
 
-const Cc = Components.classes;
-const Ci = Components.interfaces;
-const Cu = Components.utils;
-
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
+let {Prefs} = require("prefs");
+
 const debuggerService = Cc["@mozilla.org/js/jsd/debugger-service;1"].getService(Ci.jsdIDebuggerService);
-const ioService = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
-const threadManager = Cc["@mozilla.org/thread-manager;1"].getService(Ci.nsIThreadManager);
-const prefService = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefBranch);
 
 var appDir, profDir;
 var executedScripts = {__proto__: null};
 var debuggerWasOn = false;
 var debuggerOldFlags;
-var filters = {include: [], exclude: []};
 var queue = null;
 
 var paused = false;
@@ -66,7 +60,7 @@ function start()
     try
     {
       let file = dirServ.get(key, Ci.nsIFile);
-      return ioService.newFileURI(file).spec.toLowerCase().replace(/\/+/g, "/");
+      return Services.io.newFileURI(file).spec.toLowerCase().replace(/\/+/g, "/");
     }
     catch (e)
     {
@@ -121,22 +115,11 @@ function stop()
 
 function updateFiltersUI()
 {
-  // Read out JSON preference
-  try
-  {
-    filters = JSON.parse(prefService.getCharPref("extensions.jsdeobfuscator.filters"));
-  }
-  catch(e)
-  {
-    Components.utils.reportError(e);
-    return;
-  }
-
   for each (let type in ["include", "exclude"])
   {
     let element = document.getElementById(type + "Filters");
-    if (filters[type].length)
-      element.textContent = filters[type].join(", ");
+    if (Prefs.filters[type].length)
+      element.textContent = Prefs.filters[type].join(", ");
     else
       element.textContent = element.getAttribute("defValue");
   }
@@ -172,9 +155,9 @@ function processAction(action, script)
   }
   else
   {
-    if (filters.include.length && !checkMatch(script.fileName, filters.include))
+    if (Prefs.filters.include.length && !checkMatch(script.fileName, Prefs.filters.include))
       return;
-    if (checkMatch(script.fileName, filters.exclude))
+    if (checkMatch(script.fileName, Prefs.filters.exclude))
       return;
   }
 
@@ -274,7 +257,7 @@ function addScript(frame, script, source, time)
   try
   {
     // Debugger service messes up file:/ URLs, try to fix them
-    fileURI = ioService.newURI(fileURI, null, null).spec;
+    fileURI = Services.io.newURI(fileURI, null, null).spec;
   } catch(e) {}
 
   let doc = frame.document;
@@ -425,20 +408,12 @@ function handleBrowserClick(event)
 function editFilters()
 {
   let result = {};
-  window.openDialog("editfilters.xul", "_blank", "modal,centerscreen,resizable", filters, result);
+  window.openDialog("editfilters.xul", "_blank", "modal,centerscreen,resizable", Prefs.filters, result);
   if ("include" in result)
   {
     // Save preferences
-    try
-    {
-      prefService.setCharPref("extensions.jsdeobfuscator.filters", JSON.stringify(result));
-      prefService.QueryInterface(Ci.nsIPrefService).savePrefFile(null);
-      updateFiltersUI();
-    }
-    catch(e)
-    {
-      Components.utils.reportError(e);
-    }
+    Prefs.filters = result;
+    updateFiltersUI();
   }
 }
 
@@ -446,8 +421,7 @@ function resetFilters()
 {
   try
   {
-    prefService.clearUserPref("extensions.jsdeobfuscator.filters");
-    prefService.QueryInterface(Ci.nsIPrefService).savePrefFile(null);
+    Services.prefs.clearUserPref("extensions.jsdeobfuscator.filters");
     updateFiltersUI();
   }
   catch(e)
