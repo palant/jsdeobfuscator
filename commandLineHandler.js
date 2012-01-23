@@ -11,7 +11,7 @@ const Cu = Components.utils;
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
-let CommandLineHandler = exports.CommandLineHandler =
+let CommandLineHandler =
 {
   classDescription: "d-jsdeobfuscator",
   contractID: "@adblockplus.org/jsdeobfuscator/cmdline;1",
@@ -26,16 +26,14 @@ let CommandLineHandler = exports.CommandLineHandler =
     let catMan = Cc["@mozilla.org/categorymanager;1"].getService(Ci.nsICategoryManager);
     for each (let category in this.xpcom_categories)
       catMan.addCategoryEntry(category, this.classDescription, this.contractID, false, true);
-  },
 
-  shutdown: function()
-  {
-    let registrar = Components.manager.QueryInterface(Ci.nsIComponentRegistrar);
-    registrar.unregisterFactory(this.classID, this);
+    onShutdown.add((function()
+    {
+      registrar.unregisterFactory(this.classID, this);
 
-    let catMan = Cc["@mozilla.org/categorymanager;1"].getService(Ci.nsICategoryManager);
-    for each (let category in this.xpcom_categories)
-      catMan.deleteCategoryEntry(category, this.classDescription, false);
+      for each (let category in this.xpcom_categories)
+        catMan.deleteCategoryEntry(category, this.classDescription, false);
+    }).bind(this));
   },
 
   createInstance: function(outer, iid)
@@ -55,3 +53,5 @@ let CommandLineHandler = exports.CommandLineHandler =
 
   QueryInterface: XPCOMUtils.generateQI([Ci.nsICommandLineHandler, Ci.nsIFactory])
 };
+
+CommandLineHandler.init();
