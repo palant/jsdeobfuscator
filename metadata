@@ -11,6 +11,6 @@ nojar=true
 default=https://addons.mozilla.org/addon/10345/
 
 [compat]
-firefox=8.0/12.0a1
-seamonkey=2.5/2.9a1
-toolkit=8.0/12.0a1
+firefox=8.0/13.0a1
+seamonkey=2.5/2.10a1
+toolkit=8.0/13.0a1
