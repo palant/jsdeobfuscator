@@ -71,7 +71,7 @@ function popupShowingHandler(event)
 function popupHiddenHandler(event)
 {
   let popup = event.target;
-  if (popup.id != "menu_ToolsPopup" && popup.id != "toolsPopup" && popup.id != "appmenu_webDeveloper_popup")
+  if (popup.id != "menuWebDeveloperPopup" && popup.id != "toolsPopup" && popup.id != "appmenu_webDeveloper_popup")
     return;
 
   let items = popup.getElementsByClassName("jsdeobfuscator-item");
