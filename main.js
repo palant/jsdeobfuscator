@@ -51,6 +51,8 @@ function popupShowingHandler(event)
   if (popup.id != "menuWebDeveloperPopup" && popup.id != "toolsPopup" && popup.id != "appmenu_webDeveloper_popup")
     return;
 
+  popupHiddenHandler(event);
+
   let label = getMenuItem();
   let item = popup.ownerDocument.createElement("menuitem");
   item.setAttribute("label", label);
