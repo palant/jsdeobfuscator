@@ -21,7 +21,7 @@ new WindowObserver({
       return;
 
     window.addEventListener("popupshowing", popupShowingHandler, false);
-    window.addEventListener("popuphiding", popupHidingHandler, false);
+    window.addEventListener("popuphidden", popupHiddenHandler, false);
   },
 
   removeFromWindow: function(window)
@@ -31,7 +31,7 @@ new WindowObserver({
       return;
 
     window.removeEventListener("popupshowing", popupShowingHandler, false);
-    window.removeEventListener("popuphiding", popupHidingHandler, false);
+    window.removeEventListener("popuphidden", popupHiddenHandler, false);
   }
 });
 
@@ -68,14 +68,14 @@ function popupShowingHandler(event)
   popup.insertBefore(item, insertAfter ? insertAfter.nextSibling: null);
 }
 
-function popupHidingHandler(event)
+function popupHiddenHandler(event)
 {
   let popup = event.target;
   if (popup.id != "menu_ToolsPopup" && popup.id != "toolsPopup" && popup.id != "appmenu_webDeveloper_popup")
     return;
 
   let items = popup.getElementsByClassName("jsdeobfuscator-item");
-  if (items.length)
+  while (items.length)
     items[0].parentNode.removeChild(items[0]);
 }
 
