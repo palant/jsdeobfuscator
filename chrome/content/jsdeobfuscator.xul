@@ -16,8 +16,8 @@
     onunload="stop()"
     buttons="none"
     ondialogaccept="return false;"
-    width="700"
-    height="500"
+    width="900"
+    height="600"
     persist="screenX screenY width height sizemode"
     windowtype="jsdeobfuscator:main">
   <script type="application/x-javascript;version=1.7" src="common.js"/>
