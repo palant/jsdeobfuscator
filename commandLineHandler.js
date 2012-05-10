@@ -25,10 +25,10 @@ let CommandLineHandler =
 
     onShutdown.add((function()
     {
-      registrar.unregisterFactory(this.classID, this);
-
       for each (let category in this.xpcom_categories)
         catMan.deleteCategoryEntry(category, this.classDescription, false);
+
+      registrar.unregisterFactory(this.classID, this);
     }).bind(this));
   },
 
