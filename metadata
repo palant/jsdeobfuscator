@@ -9,6 +9,6 @@ author=Wladimir Palant
 default=https://addons.mozilla.org/addon/10345/
 
 [compat]
-firefox=8.0/17.0a1
-seamonkey=2.5/2.14a1
-toolkit=8.0/17.0a1
+firefox=8.0/18.0a1
+seamonkey=2.5/2.15a1
+toolkit=8.0/18.0a1
