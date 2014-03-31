@@ -5,7 +5,7 @@ version=1.6.4
 author=Wladimir Palant
 
 [homepage]
-default=https://addons.mozilla.org/addon/10345/
+default=https://github.com/palant/jsdeobfuscator
 
 [compat]
 firefox=16.0/26.0
