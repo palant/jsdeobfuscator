@@ -8,6 +8,6 @@ author=Wladimir Palant
 default=https://github.com/palant/jsdeobfuscator
 
 [compat]
-firefox=16.0/35.0
-seamonkey=2.13/2.32
-toolkit=16.0/35.0
+firefox=16.0/37.0
+seamonkey=2.13/2.34
+toolkit=16.0/37.0
