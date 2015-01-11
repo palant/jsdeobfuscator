@@ -4,19 +4,20 @@
  * http://mozilla.org/MPL/2.0/.
  */
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+let {XPCOMUtils} = Cu.import("resource://gre/modules/XPCOMUtils.jsm", null);
+let {addDebuggerToGlobal} = Cu.import("resource://gre/modules/jsdebugger.jsm", null);
+addDebuggerToGlobal(this);
 
 let {Prefs} = require("prefs");
 
-const debuggerService = Cc["@mozilla.org/js/jsd/debugger-service;1"].getService(Ci.jsdIDebuggerService);
+let dbg = null;
+let appDir, profDir;
+let executedScripts = {__proto__: null};
+let debuggerWasOn = false;
+let debuggerOldFlags;
+let queue = null;
 
-var appDir, profDir;
-var executedScripts = {__proto__: null};
-var debuggerWasOn = false;
-var debuggerOldFlags;
-var queue = null;
-
-var paused = false;
+let paused = false;
 
 function start()
 {
@@ -73,44 +74,27 @@ function start()
   updateFiltersUI();
 
   // Initialize debugger
-  debuggerWasOn = debuggerService.isOn;
-  if (!debuggerWasOn)
-  {
-    if ("asyncOn" in debuggerService)
-    {
-      // Gecko 2.0 branch
-      debuggerService.asyncOn({onDebuggerActivated: onDebuggerActivated});
-    }
-    else
-    {
-      // Gecko 1.9.x branch
-      debuggerService.on();
-      onDebuggerActivated();
-    }
-  }
-  else
-    onDebuggerActivated();
-}
-
-function onDebuggerActivated()
-{
-  debuggerService.scriptHook = scriptHook;
-  debuggerService.functionHook = scriptHook;
-  debuggerService.topLevelHook = scriptHook;
-
-  debuggerOldFlags = debuggerService.flags;
-  debuggerService.flags = ("DISABLE_OBJECT_TRACE" in Ci.jsdIDebuggerService ? Ci.jsdIDebuggerService.DISABLE_OBJECT_TRACE : 0);
+  dbg = new Debugger();
+  dbg.findAllGlobals().map(addGlobal);
+  dbg.onNewGlobal = addGlobal;
+  dbg.onNewScript = processAction.bind(null, "compiled");
 }
 
 function stop()
 {
-  debuggerService.scriptHook = null;
-  debuggerService.functionHook = null;
-  debuggerService.topLevelHook = null;
-  debuggerService.interruptHook = null;
-  debuggerService.flags = debuggerOldFlags;
-  if (!debuggerWasOn)
-    debuggerService.off();
+  dbg.removeAllDebuggees();
+}
+
+function addGlobal(global)
+{
+  try
+  {
+    dbg.addDebuggee(global);
+  }
+  catch (e)
+  {
+    // Attempting to debug our own compartment - ignore
+  }
 }
 
 function updateFiltersUI()
@@ -155,9 +139,9 @@ function processAction(action, script)
   }
   else
   {
-    if (Prefs.filters.include.length && !checkMatch(script.fileName, Prefs.filters.include))
+    if (Prefs.filters.include.length && !checkMatch(script.url, Prefs.filters.include))
       return;
-    if (checkMatch(script.fileName, Prefs.filters.exclude))
+    if (checkMatch(script.url, Prefs.filters.exclude))
       return;
   }
 
@@ -170,7 +154,7 @@ function processAction(action, script)
   // Get the script source now, it might be gone later :-(
   let source = null;
   if (action == "compiled" || (action == "executed" && !(script.tag in executedScripts)))
-    source = script.functionSource;
+    source = script.source.text;
 
   queue.push([action, script, source, new Date()]);
   if (action == "executed" && !(script.tag in executedScripts))
@@ -253,7 +237,7 @@ function processQueue()
 
 function addScript(frame, script, source, time)
 {
-  let fileURI = script.fileName;
+  let fileURI = script.url;
   try
   {
     // Debugger service messes up file:/ URLs, try to fix them
@@ -266,12 +250,12 @@ function addScript(frame, script, source, time)
   let entry = template.cloneNode(true);
   entry.removeAttribute("id");
   entry.getElementsByClassName("time")[0].textContent = formatTime(time);
-  entry.getElementsByClassName("scriptLine")[0].textContent = script.baseLineNumber;
+  entry.getElementsByClassName("scriptLine")[0].textContent = script.startLine;
   entry.getElementsByClassName("scriptText")[0].textContent = source;
 
   let scriptURLNode = entry.getElementsByClassName("scriptURL")[0];
   scriptURLNode.href = scriptURLNode.textContent = fileURI;
-  scriptURLNode.lineNum = script.baseLineNumber;
+  scriptURLNode.lineNum = script.startLine;
 
   template.parentNode.appendChild(entry);
   return entry;
@@ -402,7 +386,7 @@ function handleBrowserClick(event)
     return;
 
   // viewSourceUtils.js would help but it isn't unusable enough in Firefox 3.0
-  window.openDialog("chrome://global/content/viewSource.xul", "_blank", "all,dialog=no", linkNode.href, null, null, linkNode.lineNum, false); 
+  window.openDialog("chrome://global/content/viewSource.xul", "_blank", "all,dialog=no", linkNode.href, null, null, linkNode.lineNum, false);
 }
 
 function editFilters()
@@ -434,7 +418,6 @@ var scriptHook =
 {
   onScriptCreated: function(script)
   {
-    processAction("compiled", script);
   },
   onScriptDestroyed: function(script)
   {
