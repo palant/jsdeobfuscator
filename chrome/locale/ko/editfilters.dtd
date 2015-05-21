@@ -1,3 +1,0 @@
-<!ENTITY window.title "필터 수정">
-<!ENTITY include.label "포함할 스크립트(행 당 접두어 하나, '전부'인 경우 빈칸으로 남겨두세요):">
-<!ENTITY exclude.label "제외할 스크립트(행 당 접두어 하나, '전부'인 경우 빈칸으로 남겨두세요):">

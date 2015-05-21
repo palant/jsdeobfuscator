@@ -4,5 +4,12 @@
  * http://mozilla.org/MPL/2.0/.
  */
 
-// Register inspector tool
-require("panel");
+button
+{
+  text-align: center;
+}
+
+#empty-message
+{
+  font-size: 200%;
+}

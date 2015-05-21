@@ -1,0 +1,3 @@
+<!ENTITY empty.notice "Trigger some code or &lt;button&gt;Reload&lt;/button&gt; the page to see the scripts being compiled.">
+
+<!ENTITY compiled.label "Compiled:">

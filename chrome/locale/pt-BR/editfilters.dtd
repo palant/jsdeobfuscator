@@ -1,3 +1,0 @@
-<!ENTITY window.title "Modificar filtros">
-<!ENTITY include.label "Scripts a incluir (um prefixo por linha, deixar em branco para 'todos')">
-<!ENTITY exclude.label "Scripts a excluir (um prefixo por linha, deixar em branco para 'nenhum')">

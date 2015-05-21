@@ -1,6 +1,0 @@
-<!ENTITY dummy.text        "Keine Skripte registriert, vielleicht jetzt eine Webseite öffnen?">
-<!ENTITY url.label         "Skript:">
-<!ENTITY line.label        "Zeile:">
-<!ENTITY numCalls.label    "Anzahl Aufrufe:">
-<!ENTITY avgTime.label     "Mittlere Ausführungzeit (ms):">
-<!ENTITY recursion.label   "Rekursion festgestellt">

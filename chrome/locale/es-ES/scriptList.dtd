@@ -1,6 +1,0 @@
-<!ENTITY dummy.text "No hay scripts, pruebe a abrir una página web.">
-<!ENTITY url.label "Script:">
-<!ENTITY line.label "Línea:">
-<!ENTITY numCalls.label "Número de llamadas:">
-<!ENTITY avgTime.label "Tiempo medio de ejecución (ms):">
-<!ENTITY recursion.label "detectada recursión">

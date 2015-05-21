@@ -1,6 +1,0 @@
-<!ENTITY dummy.text        "Скриптов нет, может надо открыть страницу?">
-<!ENTITY url.label         "Скрипт:">
-<!ENTITY line.label        "Строка:">
-<!ENTITY numCalls.label    "Количество вызовов:">
-<!ENTITY avgTime.label     "Среднее время выполнения (мс):">
-<!ENTITY recursion.label   "обнаружена рекурсия">

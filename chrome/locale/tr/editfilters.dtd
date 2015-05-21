@@ -1,3 +1,0 @@
-<!ENTITY window.title "Süzgeçi düzenle">
-<!ENTITY include.label "Dahil olan komut dosyaları (her biri için bir satır, &quot;hepsi&quot; için boş bırakın):">
-<!ENTITY exclude.label "Hariç tutulan komut dosyaları (her biri için bir satır,&quot;hiçbiri&quot; için boş bırakın):">

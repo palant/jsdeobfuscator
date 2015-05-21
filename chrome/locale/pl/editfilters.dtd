@@ -1,3 +1,0 @@
-<!ENTITY window.title "Modyfikowanie filtrów">
-<!ENTITY include.label "Skrypty do dołączenia (każdy prefiks w osobnym wierszu, pusty oznacza „wszystkie”">
-<!ENTITY exclude.label "Skrypty do wykluczenia (każdy prefiks w osobnym wierszu, pusty oznacza „wszystkie”">

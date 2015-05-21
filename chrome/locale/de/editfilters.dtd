@@ -1,3 +1,0 @@
-<!ENTITY window.title           "Filter anpassen">
-<!ENTITY include.label          "Eingeschlossene Skripte (eine Adresse/Vorspann pro Zeile, für 'alle' komplett leer lassen):">
-<!ENTITY exclude.label          "Ausgeschlossene Skripte (eine Adresse/Vorspann pro Zeile, für 'keine' komplett leer lassen):">

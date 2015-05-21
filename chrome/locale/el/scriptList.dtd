@@ -1,6 +1,0 @@
-<!ENTITY dummy.text "Δεν υπάρχουν σενάρια για προβολή, δοκιμάστε να ανοίξετε έναν ιστότοπο.">
-<!ENTITY url.label "Σενάριο:">
-<!ENTITY line.label "Γραμμή:">
-<!ENTITY numCalls.label "Αριθμός κλήσεων:">
-<!ENTITY avgTime.label "Μέσος χρόνος εκτέλεσης (ms):">
-<!ENTITY recursion.label "ανιχνεύθηκε αναδρομή">

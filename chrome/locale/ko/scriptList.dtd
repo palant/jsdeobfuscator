@@ -1,6 +1,0 @@
-<!ENTITY dummy.text "표시할 스크립트가 없습니다, 웹사이트 열기를 시도합니다.">
-<!ENTITY url.label "스크립트:">
-<!ENTITY line.label "행:">
-<!ENTITY numCalls.label "호출수:">
-<!ENTITY avgTime.label "평균 실행 시간 (ms):">
-<!ENTITY recursion.label "재귀 검출">

@@ -1,6 +1,0 @@
-<!ENTITY dummy.text "Inga skript finns att visa, försök med att öppna en webbplats.">
-<!ENTITY url.label "Skript:">
-<!ENTITY line.label "Rad:">
-<!ENTITY numCalls.label "Antal anrop:">
-<!ENTITY avgTime.label "Genomsnittlig körningstid (ms):">
-<!ENTITY recursion.label "rekursion har påträffats">
