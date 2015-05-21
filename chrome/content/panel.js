@@ -94,14 +94,22 @@ updateTheme();
 Services.prefs.addObserver(THEME_PREF, updateTheme, false);
 window.addEventListener("unload", () => Services.prefs.removeObserver(THEME_PREF, updateTheme), false);
 
-// HACK: Using a string bundle to format a time. Unfortunately, format() function isn't
-// exposed in any other way (bug 451360).
-var timeFormat = Cc["@mozilla.org/intl/stringbundle;1"].getService(Ci.nsIStringBundleService)
-                           .createBundle("data:text/plain,format=" + encodeURIComponent("%02S:%02S:%02S.%03S"));
+let timeFormatter = new Intl.DateTimeFormat("en", {
+  hour12: false,
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit"
+}).format;
+let millisFormatter = new Intl.NumberFormat("en", {
+  useGrouping: false,
+  minimumIntegerDigits: 3,
+  maximumFractionDigits: 0
+}).format;
+
 function formatTime(time)
 {
-  date = new Date(time);
-  return timeFormat.formatStringFromName("format", [date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()], 4);
+  let date = new Date(time);
+  return timeFormatter(date) + "." + millisFormatter(date.getMilliseconds());
 }
 
 function addScript(script)
