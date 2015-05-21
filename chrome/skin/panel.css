@@ -4,14 +4,50 @@
  * http://mozilla.org/MPL/2.0/.
  */
 
+.dark-theme
+{
+  --body-background: #14171a;
+  --body-color: #8fa1b2;
+  --body-color-alt: #b6babf;
+  --toolbar-background: #343c45;
+  --selection-background: #1d4f73;
+  --selection-color: #f5f7fa;
+  --splitter-color: black;
+  --highlight-blue: #46afe3;
+  --content-color1: #a9bacb;
+
+  --button-background: rgba(0, 0, 0, 0.2);
+  --button-border: rgba(0, 0, 0, 0.4);
+  --item-border-top: rgba(0, 0, 0, 0.2);
+  --item-border-bottom: rgba(128, 128, 128, 0.15);
+}
+
+.light-theme
+{
+  --body-background: #fcfcfc;
+  --body-color: #18191a;
+  --body-color-alt: #585959;
+  --toolbar-background: #f0f1f2;
+  --selection-background: #4c9ed9;
+  --selection-color: #f5f7fa;
+  --splitter-color: #aaaaaa;
+  --highlight-blue: #0088cc;
+  --content-color1: #292e33;
+
+  --button-background: rgba(170, 170, 170, 0.2);
+  --button-border: rgba(170, 170, 170, 0.5);;
+  --item-border-top: rgba(128, 128, 128, 0.15);
+  --item-border-bottom: transparent;
+}
+
 button
 {
   -moz-appearance: none;
   text-align: center;
   color: var(--content-color1);
   padding: 5px 10px;
-  background-color: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(0, 0, 0, 0.4);
+  background-color: var(--button-background);
+  border: 1px solid var(--button-border);
 }
 
 #empty-message
@@ -58,6 +94,12 @@ splitter
   padding: 0px;
 }
 
+#list > richlistitem
+{
+  border-top: 1px solid var(--item-border-top);
+  border-bottom: 1px solid var(--item-border-bottom);
+}
+
 #list > richlistitem[selected=true]
 {
   background-color: var(--selection-background);
@@ -66,6 +108,11 @@ splitter
 .displayName
 {
   color: var(--selection-color);
+}
+
+:root.light-theme richlistitem:not([selected=true]) .displayName
+{
+  color: var(--body-color-alt);
 }
 
 .source,
@@ -77,7 +124,13 @@ splitter
 
 .location
 {
-  color:  var(--highlight-blue);
+  color: var(--highlight-blue);
+  cursor: pointer;
+}
+
+.location:hover
+{
+  text-decoration: underline;
 }
 
 .source,
@@ -91,32 +144,4 @@ splitter
   background-color: var(--body-background);
   color: var(--body-color);
   padding: 5px;
-}
-
-/*
- * Dark theme
- */
-
-.dark-theme
-{
-  --body-background: #14171a;
-  --body-color: #8fa1b2;
-  --toolbar-background: #343c45;
-  --selection-background: #1d4f73;
-  --selection-color: #f5f7fa;
-  --splitter-color: black;
-  --highlight-blue: #46afe3;
-  --content-color1: #a9bacb;
-}
-
-.light-theme
-{
-  --body-background: #fcfcfc;
-  --body-color: #18191a;
-  --toolbar-background: #f0f1f2;
-  --selection-background: #4c9ed9;
-  --selection-color: #f5f7fa;
-  --splitter-color: #aaaaaa;
-  --highlight-blue: #0088cc;
-  --content-color1: #292e33;
 }

@@ -21,7 +21,7 @@
       <description class="displayName"/>
       <description class="source" flex="1" crop="end"/>
     </hbox>
-    <description class="location text-link" crop="center"/>
+    <description class="location" crop="center"/>
     <hbox class="compileTimeContainer">
       <description value="&compiled.label;"/>
       <description class="compileTime"/>
