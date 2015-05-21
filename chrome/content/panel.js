@@ -69,6 +69,9 @@ function shortLink(link)
     return link;
   }
 
+  if (url.pathname && url.pathname.lastIndexOf("/") < url.pathname.length - 1)
+    return url.pathname.substring(url.pathname.lastIndexOf("/") + 1);
+
   return (url.pathname + url.search) || link;
 }
 
