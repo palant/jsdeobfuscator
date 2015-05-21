@@ -128,6 +128,7 @@ function addScript(script)
   let location = item.querySelector(".location");
   location.setAttribute("value", shortLink(script.url) + ":" + script.line);
   location.setAttribute("tooltiptext", script.url + ":" + script.line);
+  location.addEventListener("click", sourceLinkClicked, false)
 
   item.querySelector(".compileTime").setAttribute("value", formatTime(script.compileTime));
 
@@ -155,4 +156,22 @@ function selectionUpdated(list)
   }
 
   document.getElementById("source").value = source;
+}
+
+function sourceLinkClicked(event)
+{
+  if (event.button == 0 || event.button == 1)
+  {
+    let item = event.target;
+    while (item && !("__script" in item))
+      item = item.parentNode;
+
+    if (item)
+    {
+      gViewSourceUtils.viewSource({
+        URL: item.__script.url,
+        lineNumber: item.__script.line
+      });
+    }
+  }
 }
