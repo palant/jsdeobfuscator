@@ -7,6 +7,11 @@
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 
+let beautify_options = {
+  indent_size: 2,
+  preserve_newlines: false
+};
+
 document.addEventListener("DOMContentLoaded", function()
 {
   for (let element of document.querySelectorAll("[_template]"))
@@ -33,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function()
     while (element.lastChild)
       element.removeChild(element.lastChild);
     element.appendChild(document.createTextNode(pre));
-    element.appendChild(child)
+    element.appendChild(child);
     element.appendChild(document.createTextNode(post));
   }
 }, false);
@@ -102,6 +107,17 @@ function addScript(script)
 function selectionUpdated(list)
 {
   let item = list.selectedItem;
-  let source = item ? item.__script.source : "";
+  let source = "";
+  if (item)
+  {
+    let script = item.__script;
+    if (!script.beautified)
+    {
+      script.source = js_beautify(script.source, beautify_options);
+      script.beautified = true;
+    }
+    source = script.source;
+  }
+
   document.getElementById("source").value = source;
 }
