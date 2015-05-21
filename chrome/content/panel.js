@@ -119,7 +119,11 @@ function addScript(script)
   item.removeAttribute("hidden");
   item.__script = script;
 
-  item.querySelector(".displayName").setAttribute("value", script.displayName);
+  let displayName = item.querySelector(".displayName");
+  if (!script.displayName && script.staticLevel == 0)
+    displayName.setAttribute("value", displayName.getAttribute("top-level-label"));
+  else
+    displayName.setAttribute("value", script.displayName);
 
   let source = item.querySelector(".source");
   source.setAttribute("value", script.source.replace(/\s+/g, " "));

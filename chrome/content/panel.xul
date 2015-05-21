@@ -18,7 +18,7 @@
 
   <richlistitem id="script-template" hidden="true" orient="vertical">
     <hbox>
-      <description class="displayName"/>
+      <description class="displayName" top-level-label="&lt;&top-level.label;&gt;"/>
       <description class="source" flex="1" crop="end"/>
     </hbox>
     <description class="location" crop="center"/>
