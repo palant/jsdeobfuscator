@@ -21,8 +21,8 @@
       <description class="source" flex="1" crop="end"/>
     </hbox>
     <description class="location text-link" crop="center"/>
-    <hbox>
-      <label value="&compiled.label;"/>
+    <hbox class="compileTimeContainer">
+      <description value="&compiled.label;"/>
       <description class="compileTime"/>
     </hbox>
   </richlistitem>
