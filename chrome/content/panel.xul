@@ -30,6 +30,10 @@
     <hbox id="empty-message" _template="&empty.notice;" align="center" pack="center">
       <button id="reload"/>
     </hbox>
-    <richlistbox id="list"/>
+    <hbox>
+      <richlistbox id="list" width="245"/>
+      <splitter/>
+      <textbox id="source" readonly="true" multiline="true" flex="1"/>
+    </hbox>
   </deck>
 </window>

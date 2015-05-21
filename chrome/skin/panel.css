@@ -13,3 +13,8 @@ button
 {
   font-size: 200%;
 }
+
+splitter
+{
+  min-width: 1px;
+}

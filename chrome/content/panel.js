@@ -42,6 +42,9 @@ function setTarget(target)
 {
   let button = document.getElementById("reload");
   button.addEventListener("command", () => target.tab.linkedBrowser.reload(), false);
+
+  let list = document.getElementById("list");
+  list.addEventListener("select", () => selectionUpdated(list), false);
 }
 
 function shortLink(link)
@@ -74,12 +77,13 @@ function addScript(script)
   let item = document.getElementById("script-template").cloneNode(true);
   item.removeAttribute("id");
   item.removeAttribute("hidden");
+  item.__script = script;
 
   item.querySelector(".displayName").setAttribute("value", script.displayName);
 
   let source = item.querySelector(".source");
   source.setAttribute("value", script.source.replace(/\s+/g, " "));
-  source.setAttribute("tooltiptext", script.source);
+  source.setAttribute("tooltiptext", script.source.substr(0, 100));
 
   let location = item.querySelector(".location");
   location.setAttribute("value", shortLink(script.url) + ":" + script.line);
@@ -87,6 +91,17 @@ function addScript(script)
 
   item.querySelector(".compileTime").setAttribute("value", formatTime(script.compileTime));
 
-  document.getElementById("list").appendChild(item);
+  let list = document.getElementById("list");
+  list.appendChild(item);
+  if (!list.selectedItem)
+    list.selectItem(item);
+
   document.getElementById("deck").selectedIndex = 1;
+}
+
+function selectionUpdated(list)
+{
+  let item = list.selectedItem;
+  let source = item ? item.__script.source : "";
+  document.getElementById("source").value = source;
 }
