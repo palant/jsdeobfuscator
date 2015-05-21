@@ -97,7 +97,7 @@ splitter
  * Dark theme
  */
 
-:root
+.dark-theme
 {
   --body-background: #14171a;
   --body-color: #8fa1b2;
@@ -107,4 +107,16 @@ splitter
   --splitter-color: black;
   --highlight-blue: #46afe3;
   --content-color1: #a9bacb;
+}
+
+.light-theme
+{
+  --body-background: #fcfcfc;
+  --body-color: #18191a;
+  --toolbar-background: #f0f1f2;
+  --selection-background: #4c9ed9;
+  --selection-color: #f5f7fa;
+  --splitter-color: #aaaaaa;
+  --highlight-blue: #0088cc;
+  --content-color1: #292e33;
 }

@@ -11,7 +11,8 @@
 
 <window
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-    id="jsdeobfuscator-panel">
+    id="jsdeobfuscator-panel"
+    class="dark-theme">
   <script type="application/javascript;version=1.8" src="panel.js"/>
   <script type="application/javascript;version=1.8" src="beautify.js"/>
 
