@@ -6,11 +6,16 @@
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
+const Cu = Components.utils;
 
-let beautify_options = {
+const THEME_PREF = "devtools.theme";
+
+const BEAUTIFY_OPTIONS = {
   indent_size: 2,
   preserve_newlines: false
 };
+
+let {Services} = Cu.import("resource://gre/modules/Services.jsm", {});
 
 document.addEventListener("DOMContentLoaded", function()
 {
@@ -67,6 +72,25 @@ function shortLink(link)
   return (url.pathname + url.search) || link;
 }
 
+function updateTheme()
+{
+  let theme = "";
+  try
+  {
+    theme = Services.prefs.getCharPref(THEME_PREF);
+  }
+  catch (e)
+  {
+  }
+
+  let className = (theme == "dark" ? "dark-theme" : "light-theme");
+  document.documentElement.setAttribute("class", className);
+}
+
+updateTheme();
+Services.prefs.addObserver(THEME_PREF, updateTheme, false);
+window.addEventListener("unload", () => Services.prefs.removeObserver(THEME_PREF, updateTheme), false);
+
 // HACK: Using a string bundle to format a time. Unfortunately, format() function isn't
 // exposed in any other way (bug 451360).
 var timeFormat = Cc["@mozilla.org/intl/stringbundle;1"].getService(Ci.nsIStringBundleService)
@@ -113,7 +137,7 @@ function selectionUpdated(list)
     let script = item.__script;
     if (!script.beautified)
     {
-      script.source = js_beautify(script.source, beautify_options);
+      script.source = js_beautify(script.source, BEAUTIFY_OPTIONS);
       script.beautified = true;
     }
     source = script.source;
