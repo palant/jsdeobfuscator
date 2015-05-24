@@ -126,8 +126,7 @@ function addScript(script)
     displayName.setAttribute("value", script.displayName);
 
   let source = item.querySelector(".source");
-  source.setAttribute("value", script.source.replace(/\s+/g, " "));
-  source.setAttribute("tooltiptext", script.source.substr(0, 100));
+  source.setAttribute("value", script.source.replace(/\s+/g, " ").substr(0, 100));
 
   let location = item.querySelector(".location");
   location.setAttribute("value", shortLink(script.url) + ":" + script.line);
