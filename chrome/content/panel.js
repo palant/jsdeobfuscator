@@ -108,12 +108,15 @@ function formatTime(time)
   return timeFormatter(date) + "." + millisFormatter(date.getMilliseconds());
 }
 
+let items = Map();
+
 function addScript(script)
 {
   let item = document.getElementById("script-template").cloneNode(true);
   item.removeAttribute("id");
   item.removeAttribute("hidden");
   item.__script = script;
+  items.set(script.id, item);
 
   let displayName = item.querySelector(".displayName");
   if (!script.displayName && script.staticLevel == 0)
@@ -129,7 +132,16 @@ function addScript(script)
   location.setAttribute("tooltiptext", script.url + ":" + script.line);
   location.addEventListener("click", sourceLinkClicked, false)
 
-  item.querySelector(".compileTime").setAttribute("value", formatTime(script.compileTime));
+  let executed = "execTime" in script;
+  item.querySelector(".compileTimeLabel").hidden = executed;
+  item.querySelector(".compileTime").hidden = executed;
+  item.querySelector(".execTimeLabel").hidden = !executed;
+  item.querySelector(".execTime").hidden = !executed;
+  console.log(executed)
+  if (executed)
+    item.querySelector(".execTime").setAttribute("value", formatTime(script.execTime));
+  else
+    item.querySelector(".compileTime").setAttribute("value", formatTime(script.compileTime));
 
   let list = document.getElementById("list");
   list.appendChild(item);
@@ -137,6 +149,20 @@ function addScript(script)
     list.selectItem(item);
 
   document.getElementById("deck").selectedIndex = 1;
+}
+
+function updateScriptExecTime(id, time)
+{
+  let item = items.get(id);
+  if (!item)
+    return;
+
+  let script = item.__script;
+  script.execTime = time;
+  item.querySelector(".execTime").setAttribute("value", formatTime(script.execTime));
+
+  item.querySelector(".execTimeLabel").hidden = false;
+  item.querySelector(".execTime").hidden = false;
 }
 
 function clearList()

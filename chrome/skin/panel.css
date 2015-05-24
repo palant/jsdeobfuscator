@@ -119,7 +119,7 @@ splitter
 }
 
 .source,
-.compileTimeContainer
+.timeContainer
 {
   color: var(--body-color);
 }
@@ -131,9 +131,15 @@ splitter
 }
 
 .source,
+.compileTime,
+.execTime
+{
+  -moz-margin-start: 10px;
+}
+
 .compileTime
 {
-  margin-left: 10px;
+  -moz-margin-end: 15px;
 }
 
 #source

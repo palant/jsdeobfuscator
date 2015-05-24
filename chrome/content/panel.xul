@@ -23,9 +23,12 @@
       <description class="source" flex="1" crop="end"/>
     </hbox>
     <description class="location" crop="center"/>
-    <hbox class="compileTimeContainer">
-      <description value="&compiled.label;"/>
+    <hbox class="timeContainer">
+      <description class="compileTimeLabel" value="&compiled.label;"/>
       <description class="compileTime"/>
+
+      <description class="execTimeLabel" value="&executed.label;"/>
+      <description class="execTime"/>
     </hbox>
   </richlistitem>
 
@@ -34,7 +37,7 @@
       <button id="reload"/>
     </hbox>
     <hbox>
-      <richlistbox id="list" width="245"/>
+      <richlistbox id="list" width="300"/>
       <splitter/>
       <textbox id="source" readonly="true" multiline="true" flex="1"/>
     </hbox>

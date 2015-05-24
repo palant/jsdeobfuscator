@@ -2,3 +2,4 @@
 
 <!ENTITY top-level.label "top-level">
 <!ENTITY compiled.label "Compiled:">
+<!ENTITY executed.label "Executed:">
