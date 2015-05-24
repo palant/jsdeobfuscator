@@ -133,7 +133,7 @@ function addScript(script)
 
   let list = document.getElementById("list");
   list.appendChild(item);
-  if (!list.selectedItem)
+  if (!list.selectedItem || !list.selectedItem.parentNode)
     list.selectItem(item);
 
   document.getElementById("deck").selectedIndex = 1;
