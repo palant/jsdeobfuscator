@@ -4,10 +4,6 @@
  * http://mozilla.org/MPL/2.0/.
  */
 
-const Cc = Components.classes;
-const Ci = Components.interfaces;
-const Cu = Components.utils;
-
 const THEME_PREF = "devtools.theme";
 
 const BEAUTIFY_OPTIONS = {
@@ -171,10 +167,18 @@ function sourceLinkClicked(event)
 
     if (item)
     {
-      gViewSourceUtils.viewSource({
-        URL: item.__script.url,
-        lineNumber: item.__script.line
-      });
+      if (Services.vc.compare(require("info").applicationVersion, "41.0a1") >= 0)
+      {
+        gViewSourceUtils.viewSource({
+          URL: item.__script.url,
+          lineNumber: item.__script.line
+        });
+      }
+      else
+      {
+        // Old gViewSouce API (Gecko 40 and below)
+        gViewSourceUtils.viewSource(item.__script.url, null, null, item.__script.line);
+      }
     }
   }
 }

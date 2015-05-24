@@ -12,6 +12,7 @@
 <window
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
     id="jsdeobfuscator-panel">
+  <script type="application/javascript;version=1.8" src="common.js"/>
   <script type="application/javascript;version=1.8" src="panel.js"/>
   <script type="application/javascript;version=1.8" src="beautify.js"/>
   <script type="application/javascript;version=1.8" src="chrome://global/content/viewSourceUtils.js"/>
