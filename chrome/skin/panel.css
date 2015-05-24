@@ -106,18 +106,19 @@ splitter
   background-color: var(--selection-background);
 }
 
-.displayName
+.displayName,
+.location
 {
   color: var(--selection-color);
 }
 
-:root.light-theme richlistitem:not([selected=true]) .displayName
+:root.light-theme richlistitem:not([selected=true]) .displayName,
+:root.light-theme richlistitem:not([selected=true]) .location
 {
   color: var(--body-color-alt);
 }
 
 .source,
-.location,
 .compileTimeContainer
 {
   color: var(--body-color);
@@ -125,12 +126,7 @@ splitter
 
 .location
 {
-  color: var(--highlight-blue);
   cursor: pointer;
-}
-
-.location:hover
-{
   text-decoration: underline;
 }
 
