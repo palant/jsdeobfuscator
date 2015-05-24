@@ -139,6 +139,15 @@ function addScript(script)
   document.getElementById("deck").selectedIndex = 1;
 }
 
+function clearList()
+{
+  document.getElementById("deck").selectedIndex = 0;
+
+  let list = document.getElementById("list");
+  while (list.lastChild)
+    list.removeChild(list.lastChild);
+}
+
 function selectionUpdated(list)
 {
   let item = list.selectedItem;
