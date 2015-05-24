@@ -22,7 +22,9 @@
       <description class="displayName" top-level-label="&lt;&top-level.label;&gt;"/>
       <description class="source" flex="1" crop="end"/>
     </hbox>
-    <description class="location" crop="center"/>
+    <hbox>
+      <description class="location" crop="center"/>
+    </hbox>
     <hbox class="timeContainer">
       <description class="compileTimeLabel" value="&compiled.label;"/>
       <description class="compileTime"/>
