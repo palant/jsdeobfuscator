@@ -20,6 +20,8 @@
   --button-border: rgba(0, 0, 0, 0.4);
   --item-border-top: rgba(0, 0, 0, 0.2);
   --item-border-bottom: rgba(128, 128, 128, 0.15);
+  --toolbar-border1: rgba(128, 128, 128, 0.15);
+  --toolbar-border2: rgba(0, 0, 0, 0.2);
 }
 
 .light-theme
@@ -38,9 +40,11 @@
   --button-border: rgba(170, 170, 170, 0.5);;
   --item-border-top: rgba(128, 128, 128, 0.15);
   --item-border-bottom: transparent;
+  --toolbar-border1: transparent;
+  --toolbar-border2: rgba(128, 128, 128, 0.25);
 }
 
-button
+#reload
 {
   -moz-appearance: none;
   text-align: center;
@@ -147,4 +151,33 @@ splitter
   background-color: var(--body-background);
   color: var(--body-color);
   padding: 5px;
+}
+
+#footer
+{
+  background-color: var(--toolbar-background);
+  border-top: 1px solid var(--toolbar-border2);
+  box-shadow: 0px 1px 0px var(--toolbar-border1) inset;
+}
+
+#clear
+{
+  -moz-appearance: none;
+  text-align: center;
+  color: var(--selection-color);
+  margin: 0px;
+  padding: 2px 1vw;
+  background-color: rgba(0, 0, 0, 0.024);
+  -moz-border-start: 1px solid var(--toolbar-border1);
+  box-shadow: -1px 0px 0px var(--toolbar-border2);
+}
+
+:root.light-theme #clear
+{
+  color: var(--body-color);
+}
+
+#clear:hover
+{
+  background-color: rgba(0, 0, 0, 0.1);
 }

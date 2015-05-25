@@ -5,3 +5,5 @@
 
 <!ENTITY compiled.label "Compiled:">
 <!ENTITY executed.label "Executed:">
+
+<!ENTITY clear.label "Clear">

@@ -51,6 +51,8 @@ function setTarget(target)
 
   let list = document.getElementById("list");
   list.addEventListener("select", () => selectionUpdated(list), false);
+
+  document.getElementById("clear").addEventListener("command", clearList, false);
 }
 
 function shortLink(link)
