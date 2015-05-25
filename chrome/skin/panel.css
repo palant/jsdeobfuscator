@@ -20,8 +20,9 @@
   --button-border: rgba(0, 0, 0, 0.4);
   --item-border-top: rgba(0, 0, 0, 0.2);
   --item-border-bottom: rgba(128, 128, 128, 0.15);
-  --toolbar-border1: rgba(128, 128, 128, 0.15);
-  --toolbar-border2: rgba(0, 0, 0, 0.2);
+  --toolbar-border: rgba(11, 12, 13, 0.6);
+  --toolbarbutton-background: rgba(0, 0, 0, 0.2);
+  --toolbarbutton-background-hover: rgba(0, 0, 0, 0.3);
 }
 
 .light-theme
@@ -40,8 +41,9 @@
   --button-border: rgba(170, 170, 170, 0.5);;
   --item-border-top: rgba(128, 128, 128, 0.15);
   --item-border-bottom: transparent;
-  --toolbar-border1: transparent;
-  --toolbar-border2: rgba(128, 128, 128, 0.25);
+  --toolbar-border: #aaaaaa;
+  --toolbarbutton-background: rgba(170, 170, 170, 0.2);
+  --toolbarbutton-background-hover: rgba(170, 170, 170, 0.3);
 }
 
 #reload
@@ -153,31 +155,26 @@ splitter
   padding: 5px;
 }
 
-#footer
+#toolbar
 {
+  padding: 0px 3px;
   background-color: var(--toolbar-background);
-  border-top: 1px solid var(--toolbar-border2);
-  box-shadow: 0px 1px 0px var(--toolbar-border1) inset;
+  border-bottom: 1px solid var(--toolbar-border);
 }
 
 #clear
 {
   -moz-appearance: none;
   text-align: center;
-  color: var(--selection-color);
-  margin: 0px;
-  padding: 2px 1vw;
-  background-color: rgba(0, 0, 0, 0.024);
-  -moz-border-start: 1px solid var(--toolbar-border1);
-  box-shadow: -1px 0px 0px var(--toolbar-border2);
-}
-
-:root.light-theme #clear
-{
-  color: var(--body-color);
+  color: var(--content-color1);
+  margin: 2px 3px;
+  padding: 1px;
+  min-width: 78px;
+  min-height: 18px;
+  background-color: var(--toolbarbutton-background);
 }
 
 #clear:hover
 {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: var(--toolbarbutton-background-hover);
 }

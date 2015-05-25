@@ -38,16 +38,15 @@
     <hbox id="empty-message" _template="&empty.notice;" align="center" pack="center">
       <button id="reload"/>
     </hbox>
-    <vbox>
-      <hbox flex="1">
-        <richlistbox id="list" width="300"/>
-        <splitter/>
-        <textbox id="source" readonly="true" multiline="true" flex="1"/>
-      </hbox>
-      <hbox id="footer">
-        <spacer flex="1"/>
-        <button id="clear" label="&clear.label;"/>
-      </hbox>
-    </vbox>
+    <hbox>
+      <vbox width="300">
+        <hbox id="toolbar">
+          <button id="clear" label="&clear.label;"/>
+        </hbox>
+        <richlistbox id="list" flex="1"/>
+      </vbox>
+      <splitter/>
+      <textbox id="source" readonly="true" multiline="true" flex="1"/>
+    </hbox>
   </deck>
 </window>
