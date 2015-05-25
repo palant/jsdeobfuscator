@@ -137,7 +137,6 @@ function addScript(script)
   item.querySelector(".compileTime").hidden = executed;
   item.querySelector(".execTimeLabel").hidden = !executed;
   item.querySelector(".execTime").hidden = !executed;
-  console.log(executed)
   if (executed)
     item.querySelector(".execTime").setAttribute("value", formatTime(script.execTime));
   else
