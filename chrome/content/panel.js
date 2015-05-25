@@ -171,6 +171,7 @@ function clearList()
   let list = document.getElementById("list");
   while (list.lastChild)
     list.removeChild(list.lastChild);
+  items.clear();
 }
 
 function selectionUpdated(list)
