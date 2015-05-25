@@ -1,5 +1,7 @@
 <!ENTITY empty.notice "Trigger some code or &lt;button&gt;Reload&lt;/button&gt; the page to see the scripts being compiled.">
 
-<!ENTITY top-level.label "top-level">
+<!ENTITY top-level-code.label "top-level">
+<!ENTITY anonymous-code.label "anonymous">
+
 <!ENTITY compiled.label "Compiled:">
 <!ENTITY executed.label "Executed:">

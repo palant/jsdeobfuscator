@@ -119,8 +119,8 @@ function addScript(script)
   items.set(script.id, item);
 
   let displayName = item.querySelector(".displayName");
-  if (!script.displayName && script.staticLevel == 0)
-    displayName.setAttribute("value", displayName.getAttribute("top-level-label"));
+  if (!script.displayName)
+    displayName.setAttribute("value", displayName.getAttribute(script.staticLevel == 0 ? "top-level-label" : "anonymous-label"));
   else
     displayName.setAttribute("value", script.displayName);
 
