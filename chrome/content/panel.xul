@@ -42,6 +42,7 @@
       <vbox width="300">
         <hbox id="toolbar">
           <button id="clear" label="&clear.label;"/>
+          <button id="pause" label="&pause.label;" label-working="&pause.label;" label-paused="&resume.label;"/>
         </hbox>
         <richlistbox id="list" flex="1"/>
       </vbox>

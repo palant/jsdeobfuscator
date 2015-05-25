@@ -7,3 +7,5 @@
 <!ENTITY executed.label "Executed:">
 
 <!ENTITY clear.label "Clear">
+<!ENTITY pause.label "Pause">
+<!ENTITY resume.label "Resume">

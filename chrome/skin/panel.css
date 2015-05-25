@@ -162,7 +162,7 @@ splitter
   border-bottom: 1px solid var(--toolbar-border);
 }
 
-#clear
+#toolbar > button
 {
   -moz-appearance: none;
   text-align: center;
@@ -174,7 +174,7 @@ splitter
   background-color: var(--toolbarbutton-background);
 }
 
-#clear:hover
+#toolbar > button:hover
 {
   background-color: var(--toolbarbutton-background-hover);
 }

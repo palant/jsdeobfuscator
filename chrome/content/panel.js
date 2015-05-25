@@ -49,6 +49,15 @@ function setTarget(target)
   let button = document.getElementById("reload");
   button.addEventListener("command", () => target.tab.linkedBrowser.reload(), false);
 
+  let pause = document.getElementById("pause");
+  pause.addEventListener("command", () => {
+    target.tab.linkedBrowser.messageManager.sendAsyncMessage("jsdeobfuscator@palant.de:togglepaused", null, {
+      callback: (paused) => {
+        pause.setAttribute("label", pause.getAttribute(paused ? "label-paused" : "label-working"));
+      }
+    });
+  }, false);
+
   let list = document.getElementById("list");
   list.addEventListener("select", () => selectionUpdated(list), false);
 
