@@ -8,6 +8,93 @@ const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cu = Components.utils;
 
+let wdm = null;
+if ("@mozilla.org/dom/workers/workerdebuggermanager;1" in Cc)
+  wdm = Cc["@mozilla.org/dom/workers/workerdebuggermanager;1"].getService(Ci.nsIWorkerDebuggerManager);
+
+let workerListener = {
+  workers: new Map(),
+
+  init: function()
+  {
+    let workers = wdm.getWorkerDebuggerEnumerator();
+    while (workers.hasMoreElements())
+      this.onRegister(workers.getNext().QueryInterface(Ci.nsIWorkerDebugger));
+
+    wdm.addListener(this);
+  },
+
+  shutdown: function()
+  {
+    wdm.removeListener(this);
+
+    for (let [worker, listener] of this.workers)
+    {
+      worker.removeListener(listener);
+      worker.postMessage("shutdown");
+    }
+
+    this.workers = null;
+  },
+
+  pause: function(paused)
+  {
+    let message = paused ? "pause" : "resume";
+    for (let [worker, listener] of this.workers)
+      worker.postMessage(message);
+  },
+
+  onRegister: function(worker)
+  {
+    if (!worker.window || worker.window.top != content)
+      return;
+
+    // Map worker's local script IDs to our script IDs
+    let ids = new Map();
+
+    let listener = {
+      onClose: function()
+      {
+        workerListener.onUnregister(worker);
+      },
+      onError: function() {},
+      onFreeze: function() {},
+      onMessage: function(message)
+      {
+        message = JSON.parse(message);
+        if (message.type == "newscript")
+          ids.set(message.id, ++maxId);
+        message.id = ids.get(message.id);
+
+        let messageName = "jsdeobfuscator@palant.de:" + message.type;
+        delete message.type;
+        sendAsyncMessage(messageName, message);
+      },
+      onThaw: function() {}
+    };
+    try
+    {
+      worker.initialize("chrome://jsdeobfuscator/content/worker.js");
+      worker.addListener(listener);
+      this.workers.set(worker, listener);
+    }
+    catch (e)
+    {
+      Cu.reportError("JavaScript Deobfuscator: Failed to attach debugger to a worker, maybe somebody else already did that or Firefox version is below 39? " + e);
+    }
+  },
+
+  onUnregister: function(worker)
+  {
+    let listener = this.workers.get(worker);
+    if (listener)
+    {
+      worker.removeListener(listener);
+      this.workers.delete(worker);
+    }
+  }
+};
+
 let scripts = new WeakMap();
 let maxId = 0;
 let dbg = initDebugger();
@@ -33,6 +120,9 @@ function initDebugger()
     dbg.addDebuggee(global);
   }
 
+  if (wdm)
+    workerListener.init();
+
   dbg.onNewGlobalObject = onGlobal;
   dbg.onNewScript = onScript;
   dbg.onEnterFrame = onEnterFrame;
@@ -50,22 +140,20 @@ function destroyDebugger()
   dbg.onNewScript = undefined;
   dbg.onEnterFrame = undefined;
   dbg = null;
+
+  if (wdm)
+    workerListener.shutdown();
 }
 
 function togglePaused(message)
 {
-  if (dbg.onNewScript)
-  {
-    dbg.onNewScript = undefined;
-    dbg.onEnterFrame = undefined;
-    message.objects.callback(true);
-  }
-  else
-  {
-    dbg.onNewScript = onScript;
-    dbg.onEnterFrame = onEnterFrame;
-    message.objects.callback(false);
-  }
+  let paused = !!dbg.onNewScript;
+
+  dbg.onNewScript = paused ? undefined : onScript;
+  dbg.onEnterFrame = paused ? undefined : onEnterFrame;
+  if (wdm)
+    workerListener.pause(paused);
+  message.objects.callback(paused);
 }
 
 function onPageHide(event)
