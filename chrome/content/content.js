@@ -44,6 +44,12 @@ let workerListener = {
       worker.postMessage(message);
   },
 
+  clear: function()
+  {
+    for (let [worker, listener] of this.workers)
+      worker.postMessage("clear");
+  },
+
   onRegister: function(worker)
   {
     if (!worker.window || worker.window.top != content)
@@ -100,6 +106,7 @@ let maxId = 0;
 let dbg = initDebugger();
 addMessageListener("jsdeobfuscator@palant.de:shutdown", destroyDebugger);
 addMessageListener("jsdeobfuscator@palant.de:togglepaused", togglePaused);
+addMessageListener("jsdeobfuscator@palant.de:clear", clear);
 addEventListener("pagehide", onPageHide, false);
 
 sendAsyncMessage("jsdeobfuscator@palant.de:ready");
@@ -133,6 +140,7 @@ function destroyDebugger()
 {
   removeMessageListener("jsdeobfuscator@palant.de:shutdown", destroyDebugger);
   removeMessageListener("jsdeobfuscator@palant.de:togglepaused", togglePaused);
+  removeMessageListener("jsdeobfuscator@palant.de:clear", clear);
   removeEventListener("pagehide", onPageHide, false);
 
   dbg.removeAllDebuggees();
@@ -154,6 +162,12 @@ function togglePaused(message)
   if (wdm)
     workerListener.pause(paused);
   message.objects.callback(paused);
+}
+
+function clear(message)
+{
+  scripts.clear();
+  workerListener.clear();
 }
 
 function onPageHide(event)

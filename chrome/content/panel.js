@@ -61,7 +61,11 @@ function setTarget(target)
   let list = document.getElementById("list");
   list.addEventListener("select", () => selectionUpdated(list), false);
 
-  document.getElementById("clear").addEventListener("command", clearList, false);
+  document.getElementById("clear").addEventListener("command", function(event)
+  {
+    target.tab.linkedBrowser.messageManager.sendAsyncMessage("jsdeobfuscator@palant.de:clear");
+    clearList();
+  }, false);
 }
 
 function shortLink(link)

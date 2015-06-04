@@ -18,6 +18,8 @@ onmessage = function({data: message})
     pause();
   else if (message == "resume")
     resume();
+  else if (message == "clear")
+    clear();
 }
 
 function shutdown()
@@ -38,6 +40,11 @@ function resume()
 {
   dbg.onNewScript = onScript;
   dbg.onEnterFrame = onEnterFrame;
+}
+
+function clear()
+{
+  scripts.clear();
 }
 
 function notifyNewScript(script, executed)
