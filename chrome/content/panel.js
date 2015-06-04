@@ -66,6 +66,33 @@ function setTarget(target)
     target.tab.linkedBrowser.messageManager.sendAsyncMessage("jsdeobfuscator@palant.de:clear");
     clearList();
   }, false);
+
+  let search = document.getElementById("search");
+  let searchSpacer = document.getElementById("search-spacer");
+  search.addEventListener("focus", function()
+  {
+    search.setAttribute("flex", "1");
+    search.removeAttribute("width");
+    searchSpacer.removeAttribute("flex");
+  }, false);
+  search.addEventListener("blur", function()
+  {
+    if (!search.value.trim())
+    {
+      search.removeAttribute("flex");
+      search.setAttribute("width", "0");
+      searchSpacer.setAttribute("flex", "1");
+    }
+  }, false);
+  search.addEventListener("command", function()
+  {
+    doSearch(search.value);
+  }, false);
+
+  document.getElementById("search-command").addEventListener("command", function(event)
+  {
+    search.focus();
+  }, false);
 }
 
 function shortLink(link)
@@ -187,6 +214,38 @@ function clearList()
   while (list.lastChild)
     list.removeChild(list.lastChild);
   items.clear();
+}
+
+function doSearch(searchText)
+{
+  searchText = searchText.trim().replace(/\s+/g, " ");
+
+  let list = document.getElementById("list");
+  let firstItem = null;
+  for (let item of list.children)
+  {
+    let script = item.__script;
+    if (!searchText || (
+        (script.url + ":" + script.line).indexOf(searchText) >= 0 ||
+        script.displayName.indexOf(searchText) >= 0 ||
+        script.source.trim().replace(/\s+/g, " ").indexOf(searchText) >= 0
+    ))
+    {
+      item.removeAttribute("_filtered");
+      if (!firstItem)
+        firstItem = item;
+    }
+    else
+      item.setAttribute("_filtered", "true");
+  }
+
+  if (!list.selectedItem || list.selectedItem.hasAttribute("_filtered"))
+  {
+    if (firstItem)
+      list.selectedItem = firstItem;
+    else
+      list.selectedIndex = -1;
+  }
 }
 
 function selectionUpdated(list)

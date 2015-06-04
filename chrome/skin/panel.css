@@ -112,6 +112,11 @@ splitter
   background-color: var(--selection-background);
 }
 
+#list > richlistitem[_filtered=true]
+{
+  display: none;
+}
+
 .displayName,
 .location
 {
@@ -177,4 +182,11 @@ splitter
 #toolbar > button:hover
 {
   background-color: var(--toolbarbutton-background-hover);
+}
+
+#toolbar > textbox
+{
+  margin: 1px 3px;
+  padding: 0px;
+  border-color: var(--splitter-color);
 }

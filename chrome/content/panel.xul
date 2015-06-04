@@ -17,6 +17,14 @@
   <script type="application/javascript;version=1.8" src="beautify.js"/>
   <script type="application/javascript;version=1.8" src="chrome://global/content/viewSourceUtils.js"/>
 
+  <keyset>
+    <key id="search-key" key="F" modifiers="accel" command="search-command"/>
+  </keyset>
+
+  <commandset>
+    <command id="search-command" oncommand=" "/>
+  </commandset>
+
   <richlistitem id="script-template" hidden="true" orient="vertical">
     <hbox>
       <description class="displayName" top-level-label="&lt;&top-level-code.label;&gt;" anonymous-label="&lt;&anonymous-code.label;&gt;"/>
@@ -43,6 +51,8 @@
         <hbox id="toolbar">
           <button id="clear" label="&clear.label;"/>
           <button id="pause" label="&pause.label;" label-working="&pause.label;" label-paused="&resume.label;"/>
+          <spacer id="search-spacer" flex="1"/>
+          <textbox id="search" type="search" placeholder="&search.placeholder;" width="0"/>
         </hbox>
         <richlistbox id="list" flex="1"/>
       </vbox>
