@@ -1,4 +1,4 @@
-<!ENTITY empty.notice "Trigger some code or &lt;button&gt;Reload&lt;/button&gt; the page to see the scripts being compiled.">
+<!ENTITY empty.notice "Trigger some code or &lt;button&gt;Reload&lt;/button&gt; the page to see the scripts being compiled/executed.">
 
 <!ENTITY top-level-code.label "top-level">
 <!ENTITY anonymous-code.label "anonymous">
