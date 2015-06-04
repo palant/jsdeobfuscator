@@ -1,0 +1,7 @@
+<!ENTITY resume.label "Fortfahren">
+<!ENTITY compiled.label "Kompliliert:">
+<!ENTITY pause.label "Anhalten">
+<!ENTITY empty.notice "Lösen Sie irgendwelchen Code auf der Webseite aus oder &lt;button&gt;laden Sie die Seite neu&lt;/button&gt;, um zu sehen, welche Skripte kompiliert/ausgeführt werden.">
+<!ENTITY clear.label "Leeren">
+<!ENTITY search.placeholder "Skripte filtern">
+<!ENTITY executed.label "Ausgeführt:">

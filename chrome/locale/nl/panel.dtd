@@ -1,0 +1,8 @@
+<!ENTITY top-level-code.label "bovenaan">
+<!ENTITY anonymous-code.label "anoniem">
+<!ENTITY resume.label "Hervatten">
+<!ENTITY compiled.label "Gecompileerd:">
+<!ENTITY pause.label "Pauzeren">
+<!ENTITY clear.label "Wissen">
+<!ENTITY search.placeholder "Scripts filteren">
+<!ENTITY executed.label "Uitgevoerd:">

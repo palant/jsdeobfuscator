@@ -1,0 +1,7 @@
+<!ENTITY top-level-code.label "boppenoan">
+<!ENTITY anonymous-code.label "anonym">
+<!ENTITY resume.label "Ferfetsje">
+<!ENTITY compiled.label "Kompilearre:">
+<!ENTITY pause.label "Skoftsje">
+<!ENTITY clear.label "Wiskje">
+<!ENTITY search.placeholder "Skripts filterje">
