@@ -1,0 +1,9 @@
+<!ENTITY top-level-code.label "aukšč. lygio">
+<!ENTITY anonymous-code.label "anoniminis">
+<!ENTITY resume.label "Pratęsti">
+<!ENTITY compiled.label "Parengta:">
+<!ENTITY pause.label "Pristabdyti">
+<!ENTITY empty.notice "Aktyvuokite kodą arba &lt;button&gt;Perkraukite&lt;/button&gt; puslapį, kad pamatytumėte scenarijus, kurie yra rengiami/įvykdyti.">
+<!ENTITY clear.label "Išvalyti">
+<!ENTITY search.placeholder "Ieškoti scenarijų">
+<!ENTITY executed.label "Įvykdyta:">

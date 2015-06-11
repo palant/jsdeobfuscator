@@ -1,0 +1,9 @@
+<!ENTITY top-level-code.label "top-level">
+<!ENTITY anonymous-code.label "anonymous">
+<!ENTITY resume.label "Συνέχιση">
+<!ENTITY compiled.label "Μεταγλωττίσθηκε:">
+<!ENTITY pause.label "Παύση">
+<!ENTITY empty.notice "Ενεργοποιήστε/εκτελέστε κάποιο κώδικα ή &lt;button&gt;Επαναφορτώστε&lt;/button&gt; τη σελίδα για να δείτε τα σενάρια καθώς μεταγλωττίζονται/εκτελούνται.">
+<!ENTITY clear.label "Εκκαθάριση">
+<!ENTITY search.placeholder "Φιλτράρισμα σεναρίων">
+<!ENTITY executed.label "Εκτελέστηκε:">

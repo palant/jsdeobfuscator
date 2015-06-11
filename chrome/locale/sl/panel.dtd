@@ -1,0 +1,9 @@
+<!ENTITY top-level-code.label "najvišja-raven">
+<!ENTITY anonymous-code.label "anonimno">
+<!ENTITY resume.label "Nadaljuj">
+<!ENTITY compiled.label "Kompilirano:">
+<!ENTITY pause.label "Pavza">
+<!ENTITY empty.notice "Sprožite neko kodo ali &lt;button&gt;Ponovno naložite&lt;/button&gt; stran da vidite skripte ki bodo kompilirane/izvršene.">
+<!ENTITY clear.label "Počisti">
+<!ENTITY search.placeholder "Filtriraj skripte">
+<!ENTITY executed.label "Izvršeno:">

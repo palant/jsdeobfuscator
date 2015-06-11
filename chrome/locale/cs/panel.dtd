@@ -1,0 +1,9 @@
+<!ENTITY top-level-code.label "top-level">
+<!ENTITY anonymous-code.label "anonymní">
+<!ENTITY resume.label "Pokračovat">
+<!ENTITY compiled.label "Zkompilováno:">
+<!ENTITY pause.label "Pozastavit">
+<!ENTITY empty.notice "Vyvolejte spuštění nějakého kódu nebo &lt;button&gt;Obnovte&lt;/button&gt; tuto stránku, aby se zde kompilované/spuštěné skripty zobrazovaly.">
+<!ENTITY clear.label "Vymazat">
+<!ENTITY search.placeholder "Filtrovat skripty">
+<!ENTITY executed.label "Spuštěno:">

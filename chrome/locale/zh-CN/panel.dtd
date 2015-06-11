@@ -1,0 +1,9 @@
+<!ENTITY top-level-code.label "顶层">
+<!ENTITY anonymous-code.label "匿名">
+<!ENTITY resume.label "继续">
+<!ENTITY compiled.label "被编译：">
+<!ENTITY pause.label "暂停">
+<!ENTITY empty.notice "触发一些代码，或者&lt;button&gt;重新载入&lt;/button&gt;该页面，以查看被编译/执行的脚本。">
+<!ENTITY clear.label "清除">
+<!ENTITY search.placeholder "过滤脚本">
+<!ENTITY executed.label "被执行：">

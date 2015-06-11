@@ -1,0 +1,9 @@
+<!ENTITY top-level-code.label "nivel superior">
+<!ENTITY anonymous-code.label "anónimo">
+<!ENTITY resume.label "Reanudar">
+<!ENTITY compiled.label "Compilado:">
+<!ENTITY pause.label "Pausa">
+<!ENTITY empty.notice "Activar parte del código o &lt;button&gt;Recargar&lt;/button&gt; la página para ver qué scripts se están compilando/ejecutando.">
+<!ENTITY clear.label "Borrar">
+<!ENTITY search.placeholder "Filtrar scripts">
+<!ENTITY executed.label "Ejecutado:">

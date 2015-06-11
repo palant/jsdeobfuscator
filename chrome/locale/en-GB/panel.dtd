@@ -1,0 +1,8 @@
+<!ENTITY top-level-code.label "top-level">
+<!ENTITY anonymous-code.label "anonymous">
+<!ENTITY resume.label "Resume">
+<!ENTITY compiled.label "Compiled:">
+<!ENTITY pause.label "Pause">
+<!ENTITY clear.label "Clear">
+<!ENTITY search.placeholder "Filter scripts">
+<!ENTITY executed.label "Executed:">

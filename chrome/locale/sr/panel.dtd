@@ -1,0 +1,9 @@
+<!ENTITY top-level-code.label "највиши ниво">
+<!ENTITY anonymous-code.label "анонимно">
+<!ENTITY resume.label "Настави">
+<!ENTITY compiled.label "Компилирано:">
+<!ENTITY pause.label "Паузирај">
+<!ENTITY empty.notice "Активирајте део кода или &lt;button&gt;поново учитајте&lt;/button&gt; страницу да бисте видели скриптове који се тренутно компилирају/извршавају.">
+<!ENTITY clear.label "Очисти">
+<!ENTITY search.placeholder "Филтрирање скриптова">
+<!ENTITY executed.label "Извршено:">
