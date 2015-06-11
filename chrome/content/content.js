@@ -24,30 +24,41 @@ let workerListener = {
     wdm.addListener(this);
   },
 
+  _postMessage: function(message)
+  {
+    for (let [worker, listener] of this.workers)
+    {
+      try
+      {
+        worker.postMessage(message);
+      }
+      catch (e)
+      {
+        // Posting messages sometimes produces NS_ERROR_FAILURE even though the worker isn't closed.
+        Cu.reportError(e);
+      }
+    }
+  },
+
   shutdown: function()
   {
     wdm.removeListener(this);
 
     for (let [worker, listener] of this.workers)
-    {
       worker.removeListener(listener);
-      worker.postMessage("shutdown");
-    }
+    this._postMessage("shutdown");
 
     this.workers = null;
   },
 
   pause: function(paused)
   {
-    let message = paused ? "pause" : "resume";
-    for (let [worker, listener] of this.workers)
-      worker.postMessage(message);
+    this._postMessage(paused ? "pause" : "resume");
   },
 
   clear: function()
   {
-    for (let [worker, listener] of this.workers)
-      worker.postMessage("clear");
+    this._postMessage("clear");
   },
 
   onRegister: function(worker)
@@ -78,15 +89,23 @@ let workerListener = {
       },
       onThaw: function() {}
     };
-    try
+
+    if (worker.isInitialized)
+      Cu.reportError("JavaScript Deobfuscator: Failed to attach debugger to a worker, somebody else already did that.");
+    else
     {
-      worker.initialize("chrome://jsdeobfuscator/content/worker.js");
-      worker.addListener(listener);
-      this.workers.set(worker, listener);
-    }
-    catch (e)
-    {
-      Cu.reportError("JavaScript Deobfuscator: Failed to attach debugger to a worker, maybe somebody else already did that or Firefox version is below 39? " + e);
+      try
+      {
+        worker.initialize("chrome://jsdeobfuscator/content/worker.js");
+        if (!dbg.onNewScript)
+          worker.postMessage("pause");
+        worker.addListener(listener);
+        this.workers.set(worker, listener);
+      }
+      catch (e)
+      {
+        Cu.reportError("JavaScript Deobfuscator: Failed to attach debugger to a worker, Firefox version is below 39? " + e);
+      }
     }
   },
 
@@ -161,13 +180,17 @@ function togglePaused(message)
   dbg.onEnterFrame = paused ? undefined : onEnterFrame;
   if (wdm)
     workerListener.pause(paused);
-  message.objects.callback(paused);
+  if (message)
+    message.objects.callback(paused);
 }
 
 function clear(message)
 {
   scripts.clear();
   workerListener.clear();
+
+  if (!dbg.onNewScript)
+    togglePaused(null);
 }
 
 function onPageHide(event)

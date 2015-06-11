@@ -210,6 +210,9 @@ function clearList()
 {
   document.getElementById("deck").selectedIndex = 0;
 
+  let pause = document.getElementById("pause");
+  pause.setAttribute("label", pause.getAttribute("label-working"));
+
   let list = document.getElementById("list");
   while (list.lastChild)
     list.removeChild(list.lastChild);
