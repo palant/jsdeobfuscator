@@ -150,7 +150,7 @@ function formatTime(time)
   return timeFormatter(date) + "." + millisFormatter(date.getMilliseconds());
 }
 
-let items = Map();
+let items = new Map();
 
 function addScript(script)
 {
