@@ -1,0 +1,8 @@
+<!ENTITY top-level-code.label "topp-nivå">
+<!ENTITY anonymous-code.label "anonym">
+<!ENTITY resume.label "Fortsätt">
+<!ENTITY compiled.label "Kompilerad:">
+<!ENTITY pause.label "Paus">
+<!ENTITY clear.label "Rensa">
+<!ENTITY search.placeholder "Filtrera skript">
+<!ENTITY executed.label "Körd:">
