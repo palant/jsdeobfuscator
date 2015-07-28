@@ -1,7 +1,7 @@
 [general]
 id=jsdeobfuscator@adblockplus.org
 basename=jsdeobfuscator
-version=2.0
+version=2.0.1
 author=Wladimir Palant
 
 [homepage]
