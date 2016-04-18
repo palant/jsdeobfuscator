@@ -44,7 +44,7 @@ function resume()
 
 function clear()
 {
-  scripts.clear();
+  scripts = new WeakMap();
 }
 
 function notifyNewScript(script, executed)

@@ -189,7 +189,7 @@
 
   function clear(message)
   {
-    scripts.clear();
+    scripts = new WeakMap();
     workerListener.clear();
 
     if (!dbg.onNewScript)
