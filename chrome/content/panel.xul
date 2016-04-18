@@ -47,10 +47,11 @@
       <button id="reload"/>
     </hbox>
     <hbox>
-      <vbox width="300">
+      <vbox width="400">
         <hbox id="toolbar">
           <button id="clear" label="&clear.label;"/>
           <button id="pause" label="&pause.label;" label-working="&pause.label;" label-paused="&resume.label;"/>
+          <button id="export" label="&export.label;..." _dialogTitle="&export.dialogTitle;" _filterName="&export.filterName;"/>
           <spacer id="search-spacer" flex="1"/>
           <textbox id="search" type="search" placeholder="&search.placeholder;" width="0"/>
         </hbox>

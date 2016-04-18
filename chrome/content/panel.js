@@ -67,6 +67,11 @@ function setTarget(target)
     clearList();
   }, false);
 
+  document.getElementById("export").addEventListener("command", function(event)
+  {
+    exportList();
+  }, false);
+
   let search = document.getElementById("search");
   let searchSpacer = document.getElementById("search-spacer");
   search.addEventListener("focus", function()
@@ -217,6 +222,58 @@ function clearList()
   while (list.lastChild)
     list.removeChild(list.lastChild);
   items.clear();
+}
+
+function exportList()
+{
+  let button = document.getElementById("export");
+  let picker = Cc["@mozilla.org/filepicker;1"].createInstance(Ci.nsIFilePicker);
+  picker.init(window, button.getAttribute("_dialogTitle"), picker.modeSave);
+  picker.defaultExtension = ".js";
+  picker.appendFilter(button.getAttribute("_filterName"), "*.js");
+
+  if (picker.show() != picker.returnCancel)
+    doExportList(picker.file.path);
+}
+
+function doExportList(path)
+{
+  let list = document.getElementById("list");
+  let scripts = [];
+  for (let item of list.children)
+    scripts.push(item.__script);
+
+  let {Task} = Cu.import("resource://gre/modules/Task.jsm", {});
+  Task.spawn(function*()
+  {
+    let {OS} = Cu.import("resource://gre/modules/osfile.jsm", {});
+    let encoder = new TextEncoder();
+    let file = yield OS.File.open(path, {write: true, trunc: true});
+
+    function write(str)
+    {
+      return file.write(encoder.encode(str));
+    }
+
+    try
+    {
+      for (let script of scripts)
+      {
+        let source = script.source.trim();
+        if (!script.beautified)
+          source = js_beautify(source, BEAUTIFY_OPTIONS);
+        if (source[0] != '(')
+          source = "() {\n  " + source.replace(/\n/g, "\n  ") + "\n}";
+        source = source.replace(/{\n/, "{ // " + script.url + ":" + script.line + "\n");
+
+        yield write("function " + script.displayName + source + "\n\n");
+      }
+    }
+    finally
+    {
+      yield file.close();
+    }
+  }).catch(e => console.error(e));
 }
 
 function doSearch(searchText)

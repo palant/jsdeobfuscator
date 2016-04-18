@@ -10,4 +10,8 @@
 <!ENTITY pause.label "Pause">
 <!ENTITY resume.label "Resume">
 
+<!ENTITY export.label "Export">
+<!ENTITY export.dialogTitle "Export scripts">
+<!ENTITY export.filterName "JavaScript files">
+
 <!ENTITY search.placeholder "Filter scripts">
