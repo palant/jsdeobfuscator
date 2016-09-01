@@ -8,4 +8,4 @@ author=Wladimir Palant
 default=https://github.com/palant/jsdeobfuscator
 
 [compat]
-firefox=31.0/51.0
+firefox=31.0/52.0
