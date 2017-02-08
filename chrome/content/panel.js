@@ -11,6 +11,10 @@ const BEAUTIFY_OPTIONS = {
   preserve_newlines: false
 };
 
+
+// To read & write content to file
+const {TextDecoder, TextEncoder, OS} = Cu.import("resource://gre/modules/osfile.jsm", {});
+
 let {Services} = Cu.import("resource://gre/modules/Services.jsm", {});
 
 document.addEventListener("DOMContentLoaded", function()
@@ -157,6 +161,36 @@ function formatTime(time)
 
 let items = new Map();
 
+function makeRecorder(path) {
+    let items = [];
+    let opening = OS.File.open(path,{write: true, append: true});
+    let writing = false;
+    return function(encoded) {
+        if(items.length > 1000) {
+            console.warning("Too many items queuing up for write!");
+            return;
+        }
+        items.push(encoded);
+        if(writing == false) {
+            writing = true;
+            opening.then(file => {
+                function writeOne() {
+                    if(items.length) {
+                        file.write(items.pop()).then(derp => {
+                            file.flush().then(writeOne);
+                        });
+                    } else {
+                        writing = false;
+                    }
+                }
+            });
+        }
+    }
+}
+
+let record = makeRecorder("jsdeobfuscator.log");
+let encoder = new TextEncoder();
+
 function addScript(script)
 {
   let item = document.getElementById("script-template").cloneNode(true);
@@ -166,17 +200,21 @@ function addScript(script)
   items.set(script.id, item);
 
   let displayName = item.querySelector(".displayName");
-  if (!script.displayName)
-    displayName.setAttribute("value", displayName.getAttribute(script.staticLevel == 0 ? "top-level-label" : "anonymous-label"));
-  else
-    displayName.setAttribute("value", script.displayName);
+  let info = {};
+  info.name = script.displayName;
+  if (!info.name) {
+      info.name = displayName.getAttribute(script.staticLevel == 0 ? "top-level-label" : "anonymous-label");
+  }
+  displayName.setAttribute("value", ds);
 
   let source = item.querySelector(".source");
   source.setAttribute("value", script.source.replace(/\s+/g, " ").substr(0, 100));
+  info.source = js_beautify(script.source);
 
   let location = item.querySelector(".location");
+  info.location = script.url + ":" + script.line;
   location.setAttribute("value", shortLink(script.url) + ":" + script.line);
-  location.setAttribute("tooltiptext", script.url + ":" + script.line);
+  location.setAttribute("tooltiptext", info.location);
   location.addEventListener("click", sourceLinkClicked, false)
 
   let executed = "execTime" in script;
@@ -195,6 +233,14 @@ function addScript(script)
     list.selectItem(item);
 
   document.getElementById("deck").selectedIndex = 1;
+  if(script.execTime) {
+      record(encoder.encode(
+          script.execTime.toString() + "\n" +
+              info.name + "\n" +
+              info.location + "\n" +
+              info.source +
+              "\n"));
+  }
 }
 
 function updateScriptExecTime(id, time)
