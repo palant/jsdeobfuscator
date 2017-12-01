@@ -1,5 +1,7 @@
-JavaScript Deobfuscator
-=======================
+JavaScript Deobfuscator (DEPRECATED!)
+=====================================
+
+**IMPORTANT**: This extension is deprecated, it will not work in Firefox 57 and above. Providing comparable functionality in newer Firefox versions isn't possible.
 
 JavaScript Deobfuscator is a Firefox extension that shows you what JavaScript code runs on a web page, even if it is obfuscated and generated on the fly. Simply open JavaScript Deobfuscator from the Web Developer menu and watch the scripts being compiled/executed. [Detailed description](https://palant.de/2009/02/13/javascript-deobfuscator)
 
